@@ -100,6 +100,7 @@ nav > ul > li > a:hover:after {content:" &&"}
 #whoareus > .portraits > div > div > h6 {font-family:BauerBodoniBT-Italic,serif;font-size:1.1rem;margin:0 0 30px 0;}
 #whoareus > .portraits > div > div > p {font-family:BauerBodoniBT-Italic,serif;font-size:1.1rem;max-width:800px;margin:auto;}
 #whoareus > .portraits > div > div > ul {margin:30px auto 15px auto;}
+#whoareus > .portraits > div > div > ul > li {display:inline-block;vertical-align:top;}
 #whoareus > .portraits > div > div > p.portrait-email {font-family:TrendSansOne,serif;text-transform:uppercase;font-size:.8rem;}
 
 
@@ -108,3 +109,7 @@ nav > ul > li > a:hover:after {content:" &&"}
 .icon {display:block;width:50px;height:50px;text-decoration:none;background:no-repeat center center;margin:auto;}
 .icon:hover {cursor:pointer;}
 .icon.linkedin {background-image:url('assets/img/icon-50x50-linkedin.png')}
+.icon.viadeo {background-image:url('assets/img/icon-50x50-viadeo.png')}
+.icon.facebook {background-image:url('assets/img/icon-50x50-facebook.png')}
+.icon.plus {background-image:url('assets/img/icon-50x50-plus.png')}
+.icon.twitter {background-image:url('assets/img/icon-50x50-twitter.png')}

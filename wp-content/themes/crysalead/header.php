@@ -51,8 +51,16 @@
             <div id="site-title-wrapper">
                 <div>
                     <h3>Crysalead</h3>
-                    <h1>Cabinet de coaching</h1>
-                    <h2>spécialistes dans le développement du Bien-être<br />au service de la Performance au sein de l'entreprise</h2>
+                    <?php
+                        $args = array( 'post_type' => 'homepagecontent', 'orderby' => 'date', 'order' => 'ASC','posts_per_page' => 1);
+                        $home = new WP_Query( $args );
+                        while ( $home->have_posts() ) : $home->the_post(); ?>
+                            <h1><?php the_title(); ?></h1>
+                            <h2><?php echo get_post_meta($post->ID, 'homepagesubtitle', true); ?></h2>
+                            <?php
+                            break;
+                        endwhile;
+                    ?>
                 </div>
             </div>
 
