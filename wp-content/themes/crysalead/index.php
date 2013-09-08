@@ -185,11 +185,70 @@
 <div class="page" id="co-workers">
 	<h4 class="main-title">Les Collaborateurs</h4>
 	<hr class="title-underline">
+
+	<div id="co-workers-portraits"><!--
+		
+		<?php
+	            $args = array( 'post_type' => 'collaborateurs', 'orderby' => 'date', 'order' => 'ASC');
+	            $query = new WP_Query( $args );
+	            while ( $query->have_posts() ) : $query->the_post();
+	            	$bg = get_post_meta($post->ID, 'collaborateurportraitbg', true);
+	            	$coWorkerPortrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'collaborateurportrait', true),'full');
+	            	?>
+
+	            	--><div class="co-workers-portrait">
+	            		<div>
+	            			
+	            			<div class="co-workers-portrait-bg <?php echo $bg; ?>">
+	            				<div></div>
+	            			</div>
+
+	            			<figure>
+	            				<img src="<?php echo $coWorkerPortrait[0]; ?>">
+	            			</figure>
+
+	            		</div>
+	            		<dl>
+	            			<dt><?php the_title(); ?></dt>
+	            			<dd class="bar"></dd>
+	            			<dd><?php echo get_post_meta($post->ID, 'collaborateurrole', true); ?></dd>
+	            		</dl>
+	            	</div><!--
+
+	            	<?php
+	            endwhile;
+
+	            ?>
+
+	--></div>
 </div>
 
 <div class="page" id="contact">
 	<h4 class="main-title">Contact</h4>
 	<hr class="title-underline">
+
+	<p>Vous souhaitez faire intervenir un de nos coachs au sein de votre société</p>
+
+	<form method="POST" action="#">
+		<fieldset>
+			<input type="text" name="name" placeholder="NOM" />
+			<input type="text" name="firm" placeholder="SOCIETE" />
+		</fieldset>
+		<fieldset>
+			<input type="text" name="email" placeholder="EMAIL" />
+			<input type="text" name="phone" placeholder="TEL" />
+		</fieldset>
+
+		<select name="doc">
+			<option value="doc1">Demande de doc 1</option>
+			<option value="doc2">Demande de doc 2</option>
+		</select>
+
+		<input type="text" name="object" placeholder="OBJET" />
+		<textarea name="msg">BONJOUR, ...</textarea>
+
+		<input type="submit" id="submit" value="ENVOYER" />
+	</form>
 </div>
 
 <?php get_footer(); ?>

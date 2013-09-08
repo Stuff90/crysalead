@@ -48,15 +48,6 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
                 var self = $(this).addClass('ui-slider');
                 var slidesWrapper = self.find('.slides-wrapper');
 
-                // slidesWrapper.children().each(function(){
-                //     var self = $(this);
-                //     var columns = self.children('.slide-column');
-                    
-                //     columns.each(function(){
-                //         // $(this).css({width:(80/columns.length)+'%'});
-                //     })
-                // });
-
                 self.update = function(index){
                     var shift = -(index * $(self).width());
                     var item = $($(this).find('.slider-menu>li')[index]).addClass('active');
@@ -79,6 +70,38 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
                     return false;
                 });
             });
+        },
+
+        portraitsCoWorkers:function(){
+
+            var self = $(this),
+                width = $(document).width(),
+                current = 0,
+                eltWidth = $(this).children().width() + 70,
+                eltNumber = $(this).children().length,
+                eltNumberDisplayed = (width - (width % eltWidth)) / eltWidth,
+
+                createController = function(direction){
+                    return $('<a>').addClass('active slider-controller slider-controller-'+direction)
+                        .on('click',function(event) {
+                            event.preventDefault();
+                            current = direction == 'next'?current+1:current-1;
+
+                            cs(current);
+                            cs((-current * 350)+35);
+                            self.children(':first').css({marginLeft:(-current * 350)+35})
+                        });
+                };
+
+
+            $(this).width(eltNumberDisplayed * eltWidth);
+
+            if(eltNumber > eltNumberDisplayed){
+                $(this).after(createController('next'));
+                $(this).after(createController('prev'));
+            };
+
+            return this;
         },
 
         portraits:function(){
@@ -120,6 +143,7 @@ $(document).ready(function(){
         };
     })
 
+    $('#co-workers-portraits').portraitsCoWorkers();
     $('#petals-canvas').petalHanlder();
     $('.slider-wrapper').slider();
     $('.portraits').portraits();
