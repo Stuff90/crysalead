@@ -117,6 +117,29 @@
 	</div>
 </div>
 
+<?php
+	
+	$cloud = '';
+	$forest = '';
+
+
+    $args = array( 'post_type' => 'entrepage', 'orderby' => 'date', 'order' => 'ASC');
+    $aside = new WP_Query( $args );
+    while ( $aside->have_posts() ) : $aside->the_post();
+    	if(get_post_meta($post->ID, 'entrepagepage', true) == 'Accompagnement'){
+    		$cloud = get_post_meta($post->ID, 'entrepagestext', true);
+    	} else {
+    		$forest = get_post_meta($post->ID, 'entrepagestext', true);
+    	}
+    endwhile;
+?>
+
+<div id="aside" class="clouds">
+	
+	<p><?php echo $cloud; ?></p>
+
+</div>
+
 <div class="page" id="whoareus">
 	<h4 class="main-title">Qui sommes-nous ?</h4>
 	<hr class="title-underline">
@@ -182,6 +205,12 @@
 	</div>
 </div>
 
+<div id="aside" class="forest">
+	
+	<p><?php echo $forest; ?></p>
+
+</div>
+
 <div class="page" id="co-workers">
 	<h4 class="main-title">Les Collaborateurs</h4>
 	<hr class="title-underline">
@@ -229,7 +258,9 @@
 
 	<p>Vous souhaitez faire intervenir un de nos coachs au sein de votre société</p>
 
-	<form method="POST" action="#">
+
+	<?php echo do_shortcode('[contact-form-7 id="34" title="Formulaire de contact 1"]'); ?>
+<!-- 	<form method="POST" action="#">
 		<fieldset>
 			<input type="text" name="name" placeholder="NOM" />
 			<input type="text" name="firm" placeholder="SOCIETE" />
@@ -248,7 +279,7 @@
 		<textarea name="msg">BONJOUR, ...</textarea>
 
 		<input type="submit" id="submit" value="ENVOYER" />
-	</form>
+	</form> -->
 </div>
 
 <?php get_footer(); ?>
