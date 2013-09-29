@@ -117,6 +117,26 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
                     portraitsDesc.eq(index).addClass('active').siblings().removeClass('active');
                 });
             });
+        },
+
+        fixMenu:function(){
+
+
+            return this.each(function(){
+                var self = $(this),
+                    offsetTop = self.offset().top;
+
+                $(window).on('scroll', function(){
+                    
+                    if($(this).scrollTop() > offsetTop){
+                        self.addClass('fix-menu');
+                    } else {
+                        self.removeClass('fix-menu');
+                    };
+
+                })
+
+            });
         }
 
     });
@@ -125,31 +145,37 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
 
 
 $(document).ready(function(){
+    var self = $(this),
 
-    $(window).on('load ready resize',function(){
-        var header = $('header');
-        var titleWrapper = header.find('#site-title-wrapper');
-        var squareWidth = titleWrapper.height();
-        titleWrapper.width(squareWidth).css({left:($(window).width()-squareWidth)/2});
-        $('.page').height($(window).height());
-        $('.ui-max-width').width($(window).width());
-    }).scroll(function(){
-        var menu = $('nav');
-        var max = $(this).height() - menu.height();
-        if($(this).scrollTop() > max){
-            menu.addClass('fix-menu');
-        } else {
-            menu.removeClass('fix-menu');
+
+        init = function(callaback){
+
+            $(window).on('load ready resize',function(e){
+                var header = $('header'),
+                    titleWrapper = header.find('#site-title-wrapper'), 
+                    squareWidth = titleWrapper.height();
+                titleWrapper.width(squareWidth).css({left:($(window).width()-squareWidth)/2});
+                self.find('.page').height($(window).height());
+                self.find('.ui-max-width').width($(window).width());
+
+                if(e.type == 'load'){
+                    callaback();
+                }
+            });
+
         };
-    })
 
-    $('#co-workers-portraits').portraitsCoWorkers();
-    $('#petals-canvas').petalHanlder();
-    $('.slider-wrapper').slider();
-    $('.portraits').portraits();
-    $('nav').find('a').click(function() {
-        var self = $(this);
-        $('body').animate({scrollTop: $(self.attr('href')).offset().top}, 1300);
-        return false;
+    init(function(){
+
+        self.find('#co-workers-portraits').portraitsCoWorkers();
+        self.find('#petals-canvas').petalHanlder();
+        self.find('.slider-wrapper').slider();
+        self.find('.portraits').portraits();
+
+        self.find('nav').fixMenu().find('a').click(function() {
+            var theLink = $(this);
+            self.find('body').animate({scrollTop: $(theLink.attr('href')).offset().top}, 1300);
+            return false;
+        });
     });
 });
