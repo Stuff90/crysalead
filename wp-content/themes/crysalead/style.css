@@ -29,6 +29,7 @@ transition:all ease-in-out 1s;-webkit-transition:all ease-in-out 1s;-o-transitio
 .ui-slider > .slides-wrapper > div {position:relative;width:100%;height:100%;display:inline-block;vertical-align:top;}
 .ui-slider > .slides-wrapper > div .slide-centered {text-align:center;margin:30px auto;width:50%;}
 .ui-slider > .slides-wrapper > div .slide-column {display:inline-block;width:40%;white-space:pre-line;margin:0 15px;}
+.ui-slider > .slides-wrapper > div .slide-column.slide-column-img > img {max-width:90%;max-height:90%;}
 .ui-slider > .slides-wrapper > div .slide-column:first-child {margin:auto auto auto 10%;vertical-align:top;}	
 .ui-slider > .slides-wrapper > div .slide-column p {font-family:BauerBodoniBT-Italic,serif;font-size:1.4rem;color:#414141;margin:0 10px;}
 .ui-slider > .slides-wrapper > div .slide-column p > em {font-family:TrendSansOne,serif;font-size:.8rem;display:block;margin:8px 0;}
