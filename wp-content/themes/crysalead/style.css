@@ -92,13 +92,12 @@ nav > ul > li > a:hover:after {content:" &&"}
 #whoareus {}
 #whoareus > .portraits {}
 #whoareus > .portraits > ul {text-align:center;margin:75px 0 0 0;}
-#whoareus > .portraits > ul > li {display:inline-block;vertical-align:top;width:300px;height:300px;position:relative;margin:0 15px 0 15px;}
+#whoareus > .portraits > ul > li {display:inline-block;vertical-align:top;width:300px;height:300px;position:relative;margin:0 45px 0 45px;}
 #whoareus > .portraits > ul > li:hover {cursor:pointer;}
 #whoareus > .portraits > ul > li > img {border-radius:50%;width:300px;opacity:.1;filter: grayscale(100%);-webkit-filter: grayscale(100%);-moz-filter: grayscale(100%); filter: grayscale(100%);}
-#whoareus > .portraits > ul > li > span {border-radius:50%;width:290px;height:290px;display:block;position:absolute;margin:5px 0 0 5px;border:solid 2px #eee;}
+#whoareus > .portraits > ul > li > span {border-radius:50%;top:0;width:290px;height:290px;display:block;position:absolute;margin:5px 0 0 5px;border:solid 2px rgba(255,255,255,.4);}
 #whoareus > .portraits > ul > li.active {}
 #whoareus > .portraits > ul > li.active > img {opacity:1;filter: grayscale(0%);-webkit-filter: grayscale(0%);-moz-filter: grayscale(0%); filter: grayscale(0%);}
-#whoareus > .portraits > ul > li.active > span {border-color:#fff;}
 #whoareus > .portraits > div {margin:17px 0 0 0;}
 #whoareus > .portraits > div > div {text-align:center;display:none;}
 #whoareus > .portraits > div > div.active {display:block;}

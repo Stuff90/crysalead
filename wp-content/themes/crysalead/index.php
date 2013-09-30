@@ -147,24 +147,31 @@
 	<div class="portraits">
 		<ul class="portraits-list">
 			<?php
-	            $args = array( 'post_type' => 'membrecabinet', 'orderby' => 'date', 'order' => 'ASC');
+				$isFirst = 1;
+	            $args = array( 'post_type' => 'membrecabinet', 'orderby' => 'date', 'order' => 'DESC');
 	            $home = new WP_Query( $args );
 	            while ( $home->have_posts() ) : $home->the_post(); 
 	            	$portrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'cabinetmembreportrait', true),'full'); 
+	            	$active = '';
+	            	if($isFirst){
+	            		$active = 'active';
+	            	}
 	            	?>
-					<li>
-						<span></span>
+					<li class="<?php echo $active; ?>">
 						<img src="<?php echo $portrait[0]; ?>">
+						<span></span>
 						
 					</li>
 	                <?php 
+					$isFirst = 0;
 	            endwhile;
 	        ?>
 		</ul>
 
 		<div class="portraits-desc-list">
 			<?php
-	            $args = array( 'post_type' => 'membrecabinet', 'orderby' => 'date', 'order' => 'ASC');
+				$isFirst = 1;
+	            $args = array( 'post_type' => 'membrecabinet', 'orderby' => 'date', 'order' => 'DESC');
 	            $home = new WP_Query( $args );
 	            while ( $home->have_posts() ) : $home->the_post();
 	            	$social = get_post_meta($post->ID, 'cabinetmembresocial', true);
@@ -175,8 +182,12 @@
 
 	            	$social = explode(',', $social);
 
+	            	$active = '';
+	            	if($isFirst){
+	            		$active = 'active';
+	            	}
 	             	?>
-					<div>
+					<div class="<?php echo $active; ?>">
 						<h5><?php the_title(); ?></h5>
 						<hr />
 						<h6><?php echo get_post_meta($post->ID, 'cabinetmembrerole', true); ?></h6>
@@ -199,6 +210,7 @@
 						<p class="portrait-email"><?php echo get_post_meta($post->ID, 'cabinetmembremail', true); ?></p>
 					</div>
 	                <?php 
+	                $isFirst = 0;
 	            endwhile;
 	        ?>
 		</div>
