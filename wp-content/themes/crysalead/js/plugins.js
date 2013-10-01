@@ -35,8 +35,9 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
                     currentCoord.x = e.pageX;
                     currentCoord.y = e.pageY;
                 }).find('.flying-elt').mouseenter(function(e){
-                    var thePetal = $(this);
-                    var coord = hit(thePetal.offset() , {x:e.pageX,y:e.pageY});
+                    var thePetal = $(this),
+                        coord = hit(thePetal.offset() , {x:e.pageX,y:e.pageY});
+
                     TweenLite.to(thePetal, coord.speed, {top:coord.y,left:coord.x,ease:"CircIn"});
                 });
             });
@@ -45,24 +46,35 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
         slider:function(){
 
             return this.each(function(){
-                var self = $(this).addClass('ui-slider');
-                var slidesWrapper = self.find('.slides-wrapper');
+                var self = $(this).addClass('ui-slider'),
+                    slidesWrapper = self.find('.slides-wrapper');
 
                 self.update = function(index){
-                    var shift = -(index * $(self).width());
-                    var item = $($(this).find('.slider-menu>li')[index]).addClass('active');
+                    var shift = -(index * $(self).width()),
+                        item = $($(this).find('.slider-menu>li')[index]).addClass('active');
+
                     item.siblings().removeClass('active');
                     slidesWrapper.animate({marginLeft:shift},800);
                     this.find('.slider-menu-selector').css({marginLeft:item.offset().left + (item.width()/2)-7});
+
+                    self.find('.slider-controller').show();
+                    if(index == 0){
+                        self.find('.slider-controller-prev').hide();
+                    }
+                    if(index == slidesWrapper.children().length -1){
+                        self.find('.slider-controller-next').hide();
+                    }
                     return this;
                 }
 
                 self.update(0).find('.slider-menu>li').on('click',function(){
                     self.update($(this).index());
                 });
+
                 self.find('.slider-controller').on('click',function(){
-                    var menuItems = self.find('.slider-menu>li');
-                    var index = menuItems.filter('.active').index()+1;
+                    var menuItems = self.find('.slider-menu>li'),
+                        index = menuItems.filter('.active').index()+1;
+
                     index = ($(this).hasClass('slider-controller-prev'))?index-2:index;
                     index = (index >= menuItems.length)?0:index;
                     index = (index < 0)?menuItems.length-1:index;
@@ -119,6 +131,26 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
             });
         },
 
+        officeContentSlider:function(){
+            return this.each(function(){
+                var self = $(this),
+                    maxHeight = 460,
+                    lectureHeight = maxHeight *.8,
+                    totalHeight = self.children().height();
+                    controllerNb = ( totalHeight - ( totalHeight % lectureHeight )) / lectureHeight + 1, 
+                    sliderController = $('<ul>').addClass('office-content-controller-wrapper');
+
+                    for (var i = controllerNb - 1; i >= 0; i--) {
+                        sliderController.prepend($('<li>').addClass(i == 0?'active':'').on('click', function(e) {
+                            e.preventDefault();
+                            $(this).addClass('active').siblings().removeClass('active');
+                            self.children().css({marginTop:-( lectureHeight * $(this).index() )});
+                        }));
+                    };
+                    self.after(sliderController).height(maxHeight);
+            });
+        },
+
         fixMenu:function(){
 
 
@@ -166,8 +198,13 @@ $(document).ready(function(){
         };
 
     init(function(){
+        self.find('#loader').fadeOut('300', function() {
+           $(this).remove();
+           $('body').removeClass('loading');
+        });
 
-        self.find('#co-workers-portraits').portraitsCoWorkers();
+        self.find('#office-content-wrapper').officeContentSlider();
+        // self.find('#co-workers-portraits').portraitsCoWorkers();
         self.find('#petals-canvas').petalHanlder();
         self.find('.slider-wrapper').slider();
         self.find('.portraits').portraits();

@@ -11,7 +11,12 @@
             while ( $home->have_posts() ) : $home->the_post(); ?>
                 <h4 class="main-title"><?php the_title(); ?></h4>
 				<hr class="title-underline">
-                <?php the_content(); 
+				<div id="office-content-wrapper">
+					<div id="office-content">
+	                	<?php the_content(); ?> 
+					</div>
+				</div>
+				<?php	
                 break;
             endwhile;
         ?>
@@ -29,89 +34,52 @@
 		<a href="#" class="active slider-controller slider-controller-next"></a>
 		<div class="slides-wrapper"><!--
 			<?php
-	            $args = array( 'post_type' => 'accompagnement', 'orderby' => 'date', 'order' => 'DESC');
+				$titles = array();
+	            $args = array( 'post_type' => 'accompagnement', 'orderby' => 'date', 'order' => 'ASC');
 	            $accompagnement = new WP_Query( $args );
 	            while ( $accompagnement->have_posts() ) : $accompagnement->the_post(); ?>
-	            	--><div>
+	            	--><div class="slide">
 	            		<?php
-	            			$type = get_post_meta($post->ID, 'accompagnementtype', true);
-	            			if($type == 'img'){ 
-	            				$cover = wp_get_attachment_image_src(get_post_meta($post->ID, 'accompagnementimagecover', true),'full');
-	            				?>
-
-								<div class="slide-centered">
-									<h5 class="quotation"><?php the_title(); ?></h5>
-									<p class="quotation-author"><?php echo get_post_meta($post->ID, 'accompagnementauthor', true); ?></p>
-								</div>
-							
-								<div class="slide-centered">
-									<img src="<?php echo $cover[0]; ?>">
-									<p><br /><?php echo get_post_meta($post->ID, 'accompagnementsubtitle', true); ?></p>
-								</div>
-
-								<p class="slide-centered"><a href="#" class="ui-button">En savoir plus</a></p>
-
-	            			<?php } elseif ($type == 'text') { ?>
-	            				
-								<div class="slide-centered">
-									<h5 class="quotation"><?php the_title(); ?></h5>
-									<p class="quotation-author"><?php echo get_post_meta($post->ID, 'accompagnementauthor', true); ?></p>
-								</div>
-
-								<div>
-									<!-- <div class="slide-column slide-column-text">
-										<p>You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man. You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man. You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't.</p>
-									</div> -->
-									<div class="slide-column slide-column-text">
-										<!-- <p>You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.  You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.</p>
-										<p>You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man. </p> -->
-										<?php the_content(); ?>
-									</div>
-								</div>
-
-	            			<?php } elseif ($type == 'textimg') { 
-	            				$cover = wp_get_attachment_image_src(get_post_meta($post->ID, 'accompagnementimagecover', true),'full');
-	            				?>
-
-								<div class="slide-column slide-column-img">
-									<img src="<?php echo $cover[0] ?>" alt="Valérie" />
-								</div>
-								<div class="slide-column slide-column-text">
-									<h5 class="quotation"><?php the_title(); ?></h5>
-									<p class="quotation-author"><?php echo get_post_meta($post->ID, 'accompagnementauthor', true); ?></p>
-									<p><em><?php echo get_post_meta($post->ID, 'accompagnementsubtitle', true); ?></em></p>
-									<?php the_content(); ?>
-									
-									<p><a href="#" class="ui-button">En savoir plus</a></p>
-								</div>
-
-	            			<?php }
-	            		?>
-					</div>
-
-	            	<!--
-	                <?php 
-	            endwhile;
+	            		$column = false;
+	            		// var_dump(strlen(get_post_meta($post->ID, 'accompagnementcolumntwo', true)));
+	        			if(strlen(get_post_meta($post->ID, 'accompagnementcolumntwo', true)) !== 0) {
+	        				$column = 'column';
+	        			} ?>
+		            	<div class="<?php echo $column ?>">
+		            		<?php
+		            			echo get_post_meta($post->ID, 'accompagnementcolumnone', true);
+		            		?>
+						</div>
+	            		<?php
+	        			if($column == 'column') { ?>
+	        				<div class="column">
+	        					<?php echo get_post_meta($post->ID, 'accompagnementcolumntwo', true); ?>
+	        				</div>
+	        			<?php } ?>
+	            	</div><!--
+	            <?php endwhile;
 	        ?>--></div>
 		<div class="slider-menu-wrapper">
 			<div class="slider-menu-selector"></div>
 			<ul class="slider-menu">
-				<li class="active">
-					<span class="slider-menu-circle"></span>
-					Projet de transformation
-				</li>
-				<li>
-					<span class="slider-menu-circle"></span>
-					Performance en période de crise
-				</li>
-				<li>
-					<span class="slider-menu-circle"></span>
-					Diversité et mixité H/F Réussies
-				</li>
-				<li>
-					<span class="slider-menu-circle"></span>
-					Réseau de femme et diversité des commités de direction
-				</li>
+				<?php
+					$isFirst  = 1;
+					$args = array( 'post_type' => 'accompagnement', 'orderby' => 'date', 'order' => 'ASC');
+		            $accompagnement = new WP_Query( $args );
+		            while ( $accompagnement->have_posts() ) : $accompagnement->the_post();
+		            	$active = '';
+		            	if($isFirst){
+		            		$active = 'active';
+		            	}
+						?>
+							<li class="<?php echo $active; ?>">
+								<span class="slider-menu-circle"></span>
+								<?php the_title(); ?>
+							</li>
+						<?php
+						$isFirst = 0;
+	            	endwhile;
+				?>
 			</ul>
 		</div>
 	</div>
@@ -228,39 +196,34 @@
 	<hr class="title-underline">
 
 	<div id="co-workers-portraits"><!--
-		
+		--><div class="co-workers-portraits-slide"><!--
 		<?php
-	            $args = array( 'post_type' => 'collaborateurs', 'orderby' => 'date', 'order' => 'ASC');
+				$i = 0;
+	            $args = array( 'post_type' => 'collaborateurs', 'orderby' => 'date', 'order' => 'DESC');
 	            $query = new WP_Query( $args );
 	            while ( $query->have_posts() ) : $query->the_post();
 	            	$bg = get_post_meta($post->ID, 'collaborateurportraitbg', true);
 	            	$coWorkerPortrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'collaborateurportrait', true),'full');
-	            	?>
-
+					?>
 	            	--><div class="co-workers-portrait">
 	            		<div>
-	            			
-	            			<div class="co-workers-portrait-bg <?php echo $bg; ?>">
-	            				<div></div>
-	            			</div>
-
-	            			<figure>
-	            				<img src="<?php echo $coWorkerPortrait[0]; ?>">
-	            			</figure>
-
+							<img src="<?php echo $coWorkerPortrait[0]; ?>">
+	            			<p class="<?php echo $bg; ?>"><a target="_blank" href="mailto:<?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?>"><span><?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?></span></a></p>
 	            		</div>
-	            		<dl>
-	            			<dt><?php the_title(); ?></dt>
-	            			<dd class="bar"></dd>
-	            			<dd><?php echo get_post_meta($post->ID, 'collaborateurrole', true); ?></dd>
-	            		</dl>
+
+	            		<h5><?php the_title(); ?></h5>
+						<hr />
+						<h6><?php echo get_post_meta($post->ID, 'collaborateurrole', true); ?></h6>
 	            	</div><!--
 
 	            	<?php
+	            	$i++;
+	            	if ($i % 3 == 0) { ?>
+	            		--></div><div class="co-workers-portraits-slide"><!--
+	            	<?php }
 	            endwhile;
-
 	            ?>
-
+		--></div><!--
 	--></div>
 </div>
 
@@ -270,28 +233,9 @@
 
 	<p>Vous souhaitez faire intervenir un de nos coachs au sein de votre société</p>
 
-
 	<?php echo do_shortcode('[contact-form-7 id="34" title="Formulaire de contact 1"]'); ?>
-<!-- 	<form method="POST" action="#">
-		<fieldset>
-			<input type="text" name="name" placeholder="NOM" />
-			<input type="text" name="firm" placeholder="SOCIETE" />
-		</fieldset>
-		<fieldset>
-			<input type="text" name="email" placeholder="EMAIL" />
-			<input type="text" name="phone" placeholder="TEL" />
-		</fieldset>
 
-		<select name="doc">
-			<option value="doc1">Demande de doc 1</option>
-			<option value="doc2">Demande de doc 2</option>
-		</select>
-
-		<input type="text" name="object" placeholder="OBJET" />
-		<textarea name="msg">BONJOUR, ...</textarea>
-
-		<input type="submit" id="submit" value="ENVOYER" />
-	</form> -->
 </div>
 
+<p id="copyright"><?php echo date('Y'); ?> Crysalead - Tous droits réservé</p>
 <?php get_footer(); ?>

@@ -42,10 +42,13 @@
         -->
         <link rel="stylesheet" type="text/css" href="<?php bloginfo('template_directory'); ?>/assets/font/MyFontsWebfontsKit.css">
     </head>
-    <body>
+    <body class="loading">
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
+        <div id="loader">
+            <p>Chargement...</p>
+        </div>
         <header class="page">
 
             <div id="site-title-wrapper">
