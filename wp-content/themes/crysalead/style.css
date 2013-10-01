@@ -143,22 +143,6 @@ nav > ul > li > a:hover:after {content:" &&"}
 #co-workers > #co-workers-portraits > .co-workers-portraits-slide > .co-workers-portrait > h6 {font-family:BauerBodoniBT-Italic,serif;font-size:1.1rem;margin:0 0 30px 0;}
 #co-workers > #co-workers-portraits > .co-workers-portraits-slide > .co-workers-portrait > hr {width:70px;margin:15px auto;}
 
-/*
-#co-workers > #co-workers-portraits > .co-workers-portrait {display:inline-block;vertical-align:top;width:280px;height:440px;margin:100px 35px;-webkit-transition: all .25s ease-in; -moz-transition: all .25s ease-in; -ms-transition: all .25s ease-in; -o-transition: all .25s ease-in; transition: all .25s ease-in}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div {width:280px;height:360px;padding:80px 0 0 0;position:relative;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div > .co-workers-portrait-bg {width:280px;height:280px;background-repeat:no-repeat;border-radius:50%;padding:10px;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div > .co-workers-portrait-bg.mountains {background-image:url('assets/img/co-workers-bg-mountain.png');}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div > .co-workers-portrait-bg.forest {background-image:url('assets/img/co-workers-bg-forest.png');}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div > .co-workers-portrait-bg.ocean {background-image:url('assets/img/co-workers-bg-ocean.png');}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div > .co-workers-portrait-bg > div {width:260px;height:260px;background:#000;border-radius:50%;opacity:.75;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div > figure {position:absolute;width:280px;height:360px;text-align:center;bottom:0;overflow:hidden;border-bottom-left-radius:140px;border-bottom-right-radius:140px;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > div > figure > img {height:360px;vertical-align:bottom;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > dl {text-align:center;margin:20px 0 0 0;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > dl > dt {font-family:TrendSansOne,serif;font-size:14px;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > dl > dd {font-family:BauerBodoniBT-Italic,serif;font-size:20px;}
-#co-workers > #co-workers-portraits > .co-workers-portrait > dl > dd.bar {border:solid 1px #414141;width:70px;height:0px;margin:15px 0 15px 105px;}
-*/
-
 
 #contact p {width:700px;margin:35px auto 90px auto;font-family:BauerBodoniBT-Italic,serif;font-size:20px;text-align: center;}
 #contact form > fieldset {width:700px;margin:auto;}
