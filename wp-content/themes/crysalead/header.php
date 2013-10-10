@@ -53,7 +53,7 @@
 
             <div id="site-title-wrapper">
                 <div>
-                    <h3>Crysalead</h3>
+                    <p><a href="/"><img src="<?php bloginfo('template_url'); ?>/assets/img/logo.png" alt=""></a></p>
                     <?php
                         $args = array( 'post_type' => 'homepagecontent', 'orderby' => 'date', 'order' => 'ASC','posts_per_page' => 1);
                         $home = new WP_Query( $args );

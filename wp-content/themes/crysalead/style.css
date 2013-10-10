@@ -51,20 +51,23 @@ header > #cover {width:100%;height:70%;background:url('assets/img/cover.png') ce
 header > #site-title-wrapper {height:75%;width:40%;position:absolute;margin-top:-1%;left:30%;background:url('assets/img/cover.png') center center;border-radius:50%;}
 header > #site-title-wrapper > div {width:93%;height:93%;text-align:center;margin:auto;background:rgba(0,0,0,.9);border-radius:50%;margin:3% auto auto auto;}
 header > #site-title-wrapper > div > * {color:#fff;}
-header > #site-title-wrapper > div > h1 {font-family:TrendSansOne,serif;font-size:1.8rem;padding-top:15%;}
-header > #site-title-wrapper > div > h2 {font-family:BauerBodoniBT-Italic,serif;font-size:1.6rem;padding-top:3%;line-height:110%;word-spacing:110%;}
-header > #site-title-wrapper > div > h3 {font-size:2rem;padding-top:20%;}
+header > #site-title-wrapper > div > h1 {font-family:TrendSansOne,serif;font-size:1.3rem;padding-top:3%;}
+header > #site-title-wrapper > div > h2 {font-family:BauerBodoniBT-Italic,serif;font-size:1.6rem;padding-top:3%;line-height:110%;width:80%;text-align:center;margin:auto;}
+header > #site-title-wrapper > div > p {padding-top:30%;}
+header > #site-title-wrapper > div > p > a {}
+header > #site-title-wrapper > div > p > a > img {}
 
 
-header > #petals-canvas > .flying-elt {width:60px;height:60px;background-color:purple;position:absolute;top:100px;border-radius:50%;}
-header > #petals-canvas > .flying-elt:first-child {top:20%;left:30%;}
-header > #petals-canvas > .flying-elt:nth-child(2) {top:30%;left:30%;}
-header > #petals-canvas > .flying-elt:nth-child(3) {top:60%;left:60%;}
-header > #petals-canvas > .flying-elt:nth-child(4) {top:50%;left:35%;}
-header > #petals-canvas > .flying-elt:nth-child(5) {top:35%;left:65%;}
-header > #petals-canvas > .flying-elt:nth-child(6) {top:55%;left:70%;}
-header > #petals-canvas > .flying-elt:nth-child(7) {top:15%;left:68%;}
-header > #petals-canvas > .flying-elt:last-child {top:70%;left:40%;}
+header > #petals-canvas > .flying-elt {width:150px;height:150px;background-color:purple;position:absolute;top:100px;border-radius:50%;
+background:no-repeat center center transparent;}
+header > #petals-canvas > .flying-elt:first-child {top:20%;left:20%;background-image:url('assets/img/leaf-1.png');}
+header > #petals-canvas > .flying-elt:nth-child(2) {top:30%;left:25%;background-image:url('assets/img/leaf-2.png');}
+header > #petals-canvas > .flying-elt:nth-child(3) {top:60%;left:65%;background-image:url('assets/img/leaf-3.png');}
+header > #petals-canvas > .flying-elt:nth-child(4) {top:50%;left:35%;background-image:url('assets/img/petal-1.png');}
+header > #petals-canvas > .flying-elt:nth-child(5) {top:35%;left:65%;background-image:url('assets/img/petal-2.png');}
+header > #petals-canvas > .flying-elt:nth-child(6) {top:55%;left:70%;background-image:url('assets/img/petal-3.png');}
+header > #petals-canvas > .flying-elt:nth-child(7) {top:15%;left:68%;background-image:url('assets/img/petal-4.png');}
+header > #petals-canvas > .flying-elt:last-child {top:70%;left:40%;background-image:url('assets/img/petal-5.png');}
 
 nav {width:100%;height:60px;background-color:rgba(255,255,255,.9);}
 nav.fix-menu {position:fixed;top:0;z-index:9999}

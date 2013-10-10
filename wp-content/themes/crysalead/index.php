@@ -195,8 +195,11 @@
 	<h4 class="main-title">Les Collaborateurs</h4>
 	<hr class="title-underline">
 
+	<a href="#" class="slider-controller slider-controller-prev"></a>
+	<a href="#" class="active slider-controller slider-controller-next"></a>
+
 	<div id="co-workers-portraits"><!--
-		--><div class="co-workers-portraits-slide"><!--
+		--><div class="active co-workers-portraits-slide"><!--
 		<?php
 				$i = 0;
 	            $args = array( 'post_type' => 'collaborateurs', 'orderby' => 'date', 'order' => 'DESC');

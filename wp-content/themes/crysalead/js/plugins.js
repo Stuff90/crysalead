@@ -85,8 +85,43 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
         },
 
         portraitsCoWorkers:function(){
-            
+            return this.each(function() {
+                var self = $(this),
+                    controllers = self.find('.slider-controller'),
+                    sliderWrapper = self.find('#co-workers-portraits');
 
+                    controllers.first().hide();
+                    if(sliderWrapper.children().length == 1){
+                        controllers.hide();
+                    }
+
+                    controllers.on('click', function(e) {
+                        e.preventDefault();
+                        var firstSlide = sliderWrapper.children(':first'),
+                            shift = firstSlide.width(),
+                            indexCurrent = sliderWrapper.children('.active').index();
+
+                            console.log(indexCurrent , sliderWrapper.children().length );
+
+                        if($(e.target).hasClass('slider-controller-next')){
+                                indexCurrent++;
+                                controllers.show();
+                                if(indexCurrent < sliderWrapper.children().length) {
+                                    controllers.filter('.slider-controller-next').hide();
+                                }
+                        } else {
+                            controllers.show();
+                            if(indexCurrent != 0) {
+                                indexCurrent--;
+                            } else {
+                                controllers.filter('.slider-controller-prev').hide();
+                            }
+                        }
+                        console.log(indexCurrent);
+                        console.log(-shift*indexCurrent);
+                        sliderWrapper.children().first().animate({marginLeft:-shift*indexCurrent}, 500);
+                    });
+            });
         },
 
         portraits:function(){
@@ -177,7 +212,7 @@ $(document).ready(function(){
         });
 
         self.find('#office-content-wrapper').officeContentSlider();
-        self.find('#co-workers-portraits').portraitsCoWorkers();
+        self.find('#co-workers').portraitsCoWorkers();
         self.find('#petals-canvas').petalHanlder();
         self.find('.slider-wrapper').slider();
         self.find('.portraits').portraits();
