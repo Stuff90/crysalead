@@ -168,7 +168,7 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
 
                 $(window).on('scroll', function(){
                     
-                    if($(this).scrollTop() > offsetTop){
+                    if($(this).scrollTop() > (offsetTop - 50)){
                         self.addClass('fix-menu');
                     } else {
                         self.removeClass('fix-menu');
@@ -187,21 +187,30 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
 $(document).ready(function(){
     var self = $(this),
 
+        resize = function(e){
+            var header = $('header'),
+                titleWrapper = header.find('#site-title-wrapper'), 
+                squareWidth = titleWrapper.height();
+            titleWrapper.width(squareWidth).css({left:($(window).width()-squareWidth)/2});
+            self.find('.page').height($(window).height());
+            self.find('.ui-max-width').width($(window).width());
+        },
+
 
         init = function(callaback){
 
             $(window).on('load ready resize',function(e){
-                var header = $('header'),
-                    titleWrapper = header.find('#site-title-wrapper'), 
-                    squareWidth = titleWrapper.height();
-                titleWrapper.width(squareWidth).css({left:($(window).width()-squareWidth)/2});
-                self.find('.page').height($(window).height());
-                self.find('.ui-max-width').width($(window).width());
+                resize();
 
                 if(e.type == 'load'){
                     callaback();
                 }
-            });
+            }).on('scroll',function(e) {
+                e.preventDefault();
+                if(self.scrollLeft() !== 0){
+                    self.scrollLeft(0);
+                };
+            })
 
         };
 
@@ -217,10 +226,14 @@ $(document).ready(function(){
         self.find('.slider-wrapper').slider();
         self.find('.portraits').portraits();
 
-        self.find('nav').fixMenu().find('a').click(function() {
+        self.find('nav').fixMenu().find('a').click(function(e) {
+            e.preventDefault();
             var theLink = $(this);
             self.find('body').animate({scrollTop: $(theLink.attr('href')).offset().top}, 1300);
-            return false;
         });
+        setTimeout(function() {
+            resize();
+            $('#contact').height('auto');
+        }, 1000);
     });
 });

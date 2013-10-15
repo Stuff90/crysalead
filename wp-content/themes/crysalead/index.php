@@ -1,4 +1,22 @@
-<?php get_header(); ?>
+<?php get_header(); 
+
+	$asideContent = array();
+
+    $args = array( 'post_type' => 'entrepage', 'orderby' => 'date', 'order' => 'ASC');
+    $aside = new WP_Query( $args );
+    while ( $aside->have_posts() ) : $aside->the_post();
+
+    	$nb = (int) get_post_meta($post->ID, 'entrepagepage', true);
+
+    	$asideContent[$nb] = array(
+
+    		'text' => get_post_meta($post->ID, 'entrepagestext', true),
+    		'image' => wp_get_attachment_image_src(get_post_meta($post->ID, 'entrepagesimage', true),'full')
+
+    	);
+
+    endwhile;
+?>
 
 <div class="page" id="office">
 	<div class="side-image side-image-left">
@@ -24,7 +42,22 @@
 	<div class="side-image side-image-right">
 		<img src="<?php bloginfo('template_url'); ?>/assets/img/office-img-2.png" alt="Cover image">
 	</div>
+
 </div>
+
+<?php 
+	if(isset($asideContent[1])){
+		if(strlen($asideContent[1]['text']) !== 0){ ?>
+
+			<div id="aside" style="background-image:url(<?php echo $asideContent[1]['image'][0]; ?>)">
+				<p><?php echo $asideContent[1]['text'] ?></p>
+			</div>
+
+
+		<?php }
+	}
+?>
+
 
 <div class="page" id="accompaniment">
 	<h4 class="main-title">Notre accompagnement</h4>
@@ -83,30 +116,21 @@
 			</ul>
 		</div>
 	</div>
+
 </div>
 
-<?php
-	
-	$cloud = '';
-	$forest = '';
+<?php 
+	if(isset($asideContent[2])){
+		if(strlen($asideContent[2]['text']) !== 0){ ?>
+
+			<div id="aside" style="background-image:url(<?php echo $asideContent[2]['image'][0]; ?>)">
+				<p><?php echo $asideContent[2]['text'] ?></p>
+			</div>
 
 
-    $args = array( 'post_type' => 'entrepage', 'orderby' => 'date', 'order' => 'ASC');
-    $aside = new WP_Query( $args );
-    while ( $aside->have_posts() ) : $aside->the_post();
-    	if(get_post_meta($post->ID, 'entrepagepage', true) == 'Accompagnement'){
-    		$cloud = get_post_meta($post->ID, 'entrepagestext', true);
-    	} else {
-    		$forest = get_post_meta($post->ID, 'entrepagestext', true);
-    	}
-    endwhile;
+		<?php }
+	}
 ?>
-
-<div id="aside" class="clouds">
-	
-	<p><?php echo $cloud; ?></p>
-
-</div>
 
 <div class="page" id="whoareus">
 	<h4 class="main-title">Qui sommes-nous ?</h4>
@@ -185,14 +209,20 @@
 	</div>
 </div>
 
-<div id="aside" class="forest">
-	
-	<p><?php echo $forest; ?></p>
+<?php 
+	if(isset($asideContent[3])){
+		if(strlen($asideContent[3]['text']) !== 0){ ?>
 
-</div>
+			<div id="aside" style="background-image:url(<?php echo $asideContent[3]['image'][0]; ?>)">
+				<p><?php echo $asideContent[3]['text'] ?></p>
+			</div>
+
+		<?php }
+	}
+?>
 
 <div class="page" id="co-workers">
-	<h4 class="main-title">Les Collaborateurs</h4>
+	<h4 class="main-title">Les Partenaires</h4>
 	<hr class="title-underline">
 
 	<a href="#" class="slider-controller slider-controller-prev"></a>
@@ -230,15 +260,27 @@
 	--></div>
 </div>
 
+<?php 
+	if(isset($asideContent[4])){
+		if(strlen($asideContent[4]['text']) !== 0){ ?>
+
+			<div id="aside" style="background-image:url(<?php echo $asideContent[4]['image'][0]; ?>)">
+				<p><?php echo $asideContent[4]['text'] ?></p>
+			</div>
+
+		<?php }
+	}
+?>
+
 <div class="page" id="contact">
 	<h4 class="main-title">Contact</h4>
 	<hr class="title-underline">
 
 	<p>Vous souhaitez faire intervenir un de nos coachs au sein de votre société</p>
 
-	<?php echo do_shortcode('[contact-form-7 id="34" title="Formulaire de contact 1"]'); ?>
+	<?php echo do_shortcode('[contact-form-7 id="34" title="Formulaire de Contact"]'); ?>
 
+	<p id="copyright"><?php echo date('Y'); ?> Crysalead - Tous droits réservé</p>
 </div>
 
-<p id="copyright"><?php echo date('Y'); ?> Crysalead - Tous droits réservé</p>
 <?php get_footer(); ?>
