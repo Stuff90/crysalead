@@ -144,12 +144,8 @@
 	            $home = new WP_Query( $args );
 	            while ( $home->have_posts() ) : $home->the_post(); 
 	            	$portrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'cabinetmembreportrait', true),'full'); 
-	            	$active = '';
-	            	if($isFirst){
-	            		$active = 'active';
-	            	}
 	            	?>
-					<li class="<?php echo $active; ?>">
+					<li class="active">
 						<img src="<?php echo $portrait[0]; ?>">
 						<span></span>
 						
@@ -280,7 +276,7 @@
 
 	<?php echo do_shortcode('[contact-form-7 id="34" title="Formulaire de Contact"]'); ?>
 
-	<p id="copyright"><?php echo date('Y'); ?> Crysalead - Tous droits réservé</p>
+	<p id="copyright"><?php echo date('Y'); ?> Crysalead - Tous droits réservés</p>
 </div>
 
 <?php get_footer(); ?>

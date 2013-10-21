@@ -82,11 +82,11 @@
 
             <nav id="menu">
                 <ul>
-                    <li><a href="#office">Le cabinet</a></li>
-                    <li><a href="#accompaniment">Notre accompagnement</a></li>
-                    <li><a href="#whoareus">Qui sommes-nous ?</a></li>
-                    <li><a href="#co-workers">Les collaborateurs</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#office"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Le cabinet<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
+                    <li><a href="#accompaniment"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Notre accompagnement<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
+                    <li><a href="#whoareus"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Qui sommes-nous ?<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
+                    <li><a href="#co-workers"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Les collaborateurs<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
+                    <li><a href="#contact"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Contact<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
                 </ul>
             </nav>
         </header>

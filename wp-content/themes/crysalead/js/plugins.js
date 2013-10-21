@@ -5,28 +5,36 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
     $.fn.extend({
 
         petalHanlder:function(){
-            var currentCoord = {x:0,y:0};
-            var lastCoord = {x:0,y:0};
-            var timeUnit = 300;
+            var coverCoord = {w:$('#cover').outerWidth(true),h:$('#cover').outerHeight(true)},
+                currentCoord = {x:0,y:0},
+                lastCoord = {x:0,y:0},
+                timeUnit = 300,
 
-            var getPos = function(){
-                lastCoord.x = currentCoord.x;
-                lastCoord.y = currentCoord.y;
-                wait(timeUnit,function(){
-                    getPos();
-                });
-            };
 
-            var hit = function(petalCoord,coord){
-                var newCoord = {};
-                var dist = Math.sqrt(Math.pow(coord.x - lastCoord.x,2) + Math.pow(coord.y - lastCoord.y,2));
-                newCoord.x = -(lastCoord.x - coord.x) + petalCoord.left;
-                newCoord.x = (newCoord.x < 0)? 0 : newCoord.x;
-                newCoord.y = -(lastCoord.y - coord.y) + petalCoord.top;
-                newCoord.y = (newCoord.y < 0)? 0 : newCoord.y;
-                newCoord.speed = dist / timeUnit * 2;
-                return newCoord;
-            };
+                getPos = function(){
+                    lastCoord.x = currentCoord.x;
+                    lastCoord.y = currentCoord.y;
+                    wait(timeUnit,function(){
+                        getPos();
+                    });
+                },
+
+                hit = function(petalCoord,coord){
+                    var newCoord = {};
+                    var dist = Math.sqrt(Math.pow(coord.x - lastCoord.x,2) + Math.pow(coord.y - lastCoord.y,2));
+                    newCoord.x = -(lastCoord.x - coord.x) + petalCoord.left;
+                    newCoord.y = -(lastCoord.y - coord.y) + petalCoord.top;
+                    
+                    newCoord.x = (newCoord.x < 0)? 0 : newCoord.x > coverCoord.w ? coverCoord.w - 200 : newCoord.x;
+                    newCoord.y = (newCoord.y < 0)? 0 : newCoord.y > coverCoord.h ? coverCoord.h - 200 : newCoord.y;
+
+                    newCoord.speed = dist / timeUnit * 2;
+                    
+                    console.log(newCoord.y,newCoord.x);
+                    return newCoord;
+                };
+                    console.log(coverCoord);
+
 
             return this.each(function(){
                 getPos();
@@ -40,6 +48,35 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
 
                     TweenLite.to(thePetal, coord.speed, {top:coord.y,left:coord.x,ease:"CircIn"});
                 });
+            });
+        },
+
+        activeStateMenu:function(){
+            return this.each(function() {
+
+            });
+        },
+
+        numberOnly:function(){
+            return this.each(function() {
+                var self = $(this);
+
+                self.on('keyup', function() {
+
+                    var reg = /^\d+$/;
+                    if(reg.test(self.val())){
+                        self.removeClass('wrong');
+                    } else {
+                        self.addClass('wrong');
+                    };
+
+                    if(self.val().length === 0){
+                        self.removeClass('wrong');
+                    }
+                    
+                });
+
+
             });
         },
 
@@ -133,7 +170,6 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
 
                 portraitsImg.on('mouseenter',function(){
                     var index = $(this).index();
-                    $(this).addClass('active').siblings().removeClass('active');
                     portraitsDesc.eq(index).addClass('active').siblings().removeClass('active');
                 });
             });
@@ -177,6 +213,25 @@ function wait(time, statement){setTimeout(function(){statement()},time);}
                 })
 
             });
+        },
+
+        contactMsg:function(){
+
+
+            return this.each(function(){
+                $(this).on({
+                    focus:function(){
+                        if($(this).val() == 'BONJOUR, ...'){
+                            $(this).val('BONJOUR, \n\n');
+                        }
+                    },
+                    blur:function() {
+                        if($(this).val() == 'BONJOUR, \n\n'){
+                            $(this).val('BONJOUR, ...');
+                        }
+                    }
+                });
+            });
         }
 
     });
@@ -194,10 +249,12 @@ $(document).ready(function(){
             titleWrapper.width(squareWidth).css({left:($(window).width()-squareWidth)/2});
             self.find('.page').height($(window).height());
             self.find('.ui-max-width').width($(window).width());
+            self.width(800);
         },
 
 
         init = function(callaback){
+            console.log(self);
 
             $(window).on('load ready resize',function(e){
                 resize();
@@ -225,6 +282,9 @@ $(document).ready(function(){
         self.find('#petals-canvas').petalHanlder();
         self.find('.slider-wrapper').slider();
         self.find('.portraits').portraits();
+        self.find('textarea').contactMsg();
+        self.find('[name=phone]').numberOnly();
+        self.find('#menu').activeStateMenu();
 
         self.find('nav').fixMenu().find('a').click(function(e) {
             e.preventDefault();
