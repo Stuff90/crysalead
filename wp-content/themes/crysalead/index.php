@@ -1,4 +1,4 @@
-<?php get_header(); 
+<?php get_header();
 
 	$asideContent = array();
 
@@ -18,9 +18,9 @@
     endwhile;
 ?>
 
-<div class="page" id="office">
+<div class="page fixed-height" id="office">
 	<div class="side-image side-image-left">
-		<img src="<?php bloginfo('template_url'); ?>/assets/img/office-img-1.png" alt="Cover image">
+		<!-- <img src="<?php bloginfo('template_url'); ?>/assets/img/office-img-1.png" alt="Cover image"> -->
 	</div>
 	<div class="side-image side-image-center">
 		<?php
@@ -31,16 +31,18 @@
 				<hr class="title-underline">
 				<div id="office-content-wrapper">
 					<div id="office-content">
-	                	<?php the_content(); ?> 
+	                	<?php the_content(); ?>
+					</div>
+					<div id="cabinet-slides">
 					</div>
 				</div>
-				<?php	
+				<?php
                 break;
             endwhile;
         ?>
 	</div>
 	<div class="side-image side-image-right">
-		<img src="<?php bloginfo('template_url'); ?>/assets/img/office-img-2.png" alt="Cover image">
+		<!-- <img src="<?php bloginfo('template_url'); ?>/assets/img/office-img-2.png" alt="Cover image"> -->
 	</div>
 
 </div>
@@ -49,7 +51,7 @@
 	if(isset($asideContent[1])){
 		if(strlen($asideContent[1]['text']) !== 0){ ?>
 
-			<div id="aside" style="background-image:url(<?php echo $asideContent[1]['image'][0]; ?>)">
+			<div class="aside" style="background-image:url(<?php echo $asideContent[1]['image'][0]; ?>)">
 				<p><?php echo $asideContent[1]['text'] ?></p>
 			</div>
 
@@ -59,7 +61,7 @@
 ?>
 
 
-<div class="page" id="accompaniment">
+<div class="page fixed-height" id="accompaniment">
 	<h4 class="main-title">Notre accompagnement</h4>
 	<hr class="title-underline">
 	<div class="slider-wrapper ui-max-width">
@@ -71,25 +73,25 @@
 	            $args = array( 'post_type' => 'accompagnement', 'orderby' => 'date', 'order' => 'ASC');
 	            $accompagnement = new WP_Query( $args );
 	            while ( $accompagnement->have_posts() ) : $accompagnement->the_post(); ?>
-	            	--><div class="slide">
-	            		<?php
-	            		$column = false;
-	            		// var_dump(strlen(get_post_meta($post->ID, 'accompagnementcolumntwo', true)));
-	        			if(strlen(get_post_meta($post->ID, 'accompagnementcolumntwo', true)) !== 0) {
-	        				$column = 'column';
-	        			} ?>
-		            	<div class="<?php echo $column ?>">
+	            	-->
+	            	<div class="slide">
+						<h6><?php the_title(); ?></h6>
+					  	<div class="column">
 		            		<?php
 		            			echo get_post_meta($post->ID, 'accompagnementcolumnone', true);
 		            		?>
 						</div>
-	            		<?php
-	        			if($column == 'column') { ?>
-	        				<div class="column">
-	        					<?php echo get_post_meta($post->ID, 'accompagnementcolumntwo', true); ?>
-	        				</div>
-	        			<?php } ?>
-	            	</div><!--
+        				<div class="column">
+	            			<?php $coWorkerPortrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'image_accompagnement', true),'full'); ?>
+	            			<div class="rounded">
+	            				<div>
+									<img src="<?php echo $coWorkerPortrait[0]; ?>">
+	            				</div>
+	            			</div>
+        					<!-- <?php echo get_post_meta($post->ID, 'image_accompagnement', true); ?> -->
+        				</div>
+	            	</div>
+	            	<!--
 	            <?php endwhile;
 	        ?>--></div>
 		<div class="slider-menu-wrapper">
@@ -123,7 +125,7 @@
 	if(isset($asideContent[2])){
 		if(strlen($asideContent[2]['text']) !== 0){ ?>
 
-			<div id="aside" style="background-image:url(<?php echo $asideContent[2]['image'][0]; ?>)">
+			<div class="aside" style="background-image:url(<?php echo $asideContent[2]['image'][0]; ?>)">
 				<p><?php echo $asideContent[2]['text'] ?></p>
 			</div>
 
@@ -144,24 +146,7 @@
 	            $home = new WP_Query( $args );
 	            while ( $home->have_posts() ) : $home->the_post(); 
 	            	$portrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'cabinetmembreportrait', true),'full'); 
-	            	?>
-					<li class="active">
-						<img src="<?php echo $portrait[0]; ?>">
-						<span></span>
-						
-					</li>
-	                <?php 
-					$isFirst = 0;
-	            endwhile;
-	        ?>
-		</ul>
 
-		<div class="portraits-desc-list">
-			<?php
-				$isFirst = 1;
-	            $args = array( 'post_type' => 'membrecabinet', 'orderby' => 'date', 'order' => 'DESC');
-	            $home = new WP_Query( $args );
-	            while ( $home->have_posts() ) : $home->the_post();
 	            	$social = get_post_meta($post->ID, 'cabinetmembresocial', true);
 
 	            	$social = str_replace('[', '', $social);
@@ -169,39 +154,40 @@
 	            	$social = str_replace('"', '', $social);
 
 	            	$social = explode(',', $social);
-
-	            	$active = '';
-	            	if($isFirst){
-	            		$active = 'active';
-	            	}
-	             	?>
-					<div class="<?php echo $active; ?>">
-						<h5><?php the_title(); ?></h5>
-						<hr />
-						<h6><?php echo get_post_meta($post->ID, 'cabinetmembrerole', true); ?></h6>
-						<p><?php echo get_post_meta($post->ID, 'cabinetmembrepresentationtext', true); ?></p>
-						<ul>
-							<?php
-								foreach ($social as $aSocial) { 
-									$icon = 'linkedin';
-
-									$icon = (strpos($aSocial, 'facebook') !== false)?'facebook':$icon;
-									$icon = (strpos($aSocial, 'twitter') !== false)?'twitter':$icon;
-									$icon = (strpos($aSocial, 'viadeo') !== false)?'viadeo':$icon;
-
-									?>
-										<li><a href="<?php echo $aSocial; ?>" target="_blank" class="icon <?php echo $icon; ?>"></a></li>
+	            	?>
+					<li class="active">
+						<img src="<?php echo $portrait[0]; ?>">
+						<span></span>
+						<div class="portraits-desc-list">
+							<div class="active">
+								<h5><?php the_title(); ?></h5>
+								<hr />
+								<h6><?php echo get_post_meta($post->ID, 'cabinetmembrerole', true); ?></h6>
+								<p><?php echo get_post_meta($post->ID, 'cabinetmembrepresentationtext', true); ?></p>
+								<ul>
 									<?php
-								}
-							?>
-						</ul>
-						<p class="portrait-email"><?php echo get_post_meta($post->ID, 'cabinetmembremail', true); ?></p>
-					</div>
+										foreach ($social as $aSocial) { 
+											$icon = 'linkedin';
+
+											$icon = (strpos($aSocial, 'facebook') !== false)?'facebook':$icon;
+											$icon = (strpos($aSocial, 'twitter') !== false)?'twitter':$icon;
+											$icon = (strpos($aSocial, 'viadeo') !== false)?'viadeo':$icon;
+
+											?>
+												<li><a href="<?php echo $aSocial; ?>" target="_blank" class="icon <?php echo $icon; ?>"></a></li>
+											<?php
+										}
+									?>
+									<li><a href="mailto:<?php echo get_post_meta($post->ID, 'cabinetmembremail', true); ?>"  class="icon mail"></a></li>
+								</ul>
+							</div>
+						</div>
+					</li>
 	                <?php 
-	                $isFirst = 0;
+					$isFirst = 0;
 	            endwhile;
 	        ?>
-		</div>
+		</ul>
 	</div>
 </div>
 
@@ -209,7 +195,7 @@
 	if(isset($asideContent[3])){
 		if(strlen($asideContent[3]['text']) !== 0){ ?>
 
-			<div id="aside" style="background-image:url(<?php echo $asideContent[3]['image'][0]; ?>)">
+			<div class="aside" style="background-image:url(<?php echo $asideContent[3]['image'][0]; ?>)">
 				<p><?php echo $asideContent[3]['text'] ?></p>
 			</div>
 
@@ -218,49 +204,82 @@
 ?>
 
 <div class="page" id="co-workers">
-	<h4 class="main-title">Les Partenaires</h4>
+	<h4 class="main-title">Nos Partenaires</h4>
 	<hr class="title-underline">
 
 	<a href="#" class="slider-controller slider-controller-prev"></a>
 	<a href="#" class="active slider-controller slider-controller-next"></a>
 
-	<div id="co-workers-portraits"><!--
-		--><div class="active co-workers-portraits-slide"><!--
+	<div id="co-workers-portraits">
+		<div class="active co-workers-portraits-slide">
 		<?php
-				$i = 0;
-	            $args = array( 'post_type' => 'collaborateurs', 'orderby' => 'date', 'order' => 'DESC');
-	            $query = new WP_Query( $args );
-	            while ( $query->have_posts() ) : $query->the_post();
-	            	$bg = get_post_meta($post->ID, 'collaborateurportraitbg', true);
-	            	$coWorkerPortrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'collaborateurportrait', true),'full');
-					?>
-	            	--><div class="co-workers-portrait">
-	            		<div>
-							<img src="<?php echo $coWorkerPortrait[0]; ?>">
-	            			<p class="<?php echo $bg; ?>"><a target="_blank" href="mailto:<?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?>"><span><?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?></span></a></p>
-	            		</div>
+			$itterCoworkers=1;
+            $args = array( 'post_type' => 'collaborateurs', 'orderby' => 'date', 'order' => 'DESC','posts_per_page'=> 1);
+            $query = new WP_Query( $args );
+            while ( $query->have_posts() ) : $query->the_post();
+            	$bg = get_post_meta($post->ID, 'collaborateurportraitbg', true);
+            	$coWorkerPortrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'collaborateurportrait', true),'full');
+				?>
+            	<div class="co-workers-portrait <?php echo $first ?>">
+            		<div>
+            			<div style="background-image:url(<?php echo $coWorkerPortrait[0]; ?>);">
+							<!-- <img src="<?php echo $coWorkerPortrait[0]; ?>"> -->
+            			</div>
+            			<p class="<?php echo $bg; ?>"><a href="mailto:<?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?>"><span><?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?></span><span class="border-round"></span></a></p>
+            		</div>
 
-	            		<h5><?php the_title(); ?></h5>
-						<hr />
-						<h6><?php echo get_post_meta($post->ID, 'collaborateurrole', true); ?></h6>
-	            	</div><!--
+            		<h5><?php the_title(); ?></h5>
+					<hr />
+					<h6><?php echo get_post_meta($post->ID, 'collaborateurrole', true); ?></h6>
+            	</div>
+			<?php
+        	endwhile;
+            $args = array( 'post_type' => 'collaborateurs',
+            	'orderby' => 'date', 
+            	'order' => 'DESC', 
+            	'orderby' => 'rand',
+            	'meta_query' => array(
+				       array(
+				           'key' => 'exergue',
+				           'value' => 'false',
+				           'compare' => 'LIKE',
+				       )
+				   ));
+            $query = new WP_Query( $args );
 
-	            	<?php
-	            	$i++;
-	            	if ($i % 3 == 0) { ?>
-	            		--></div><div class="co-workers-portraits-slide"><!--
+            while ( $query->have_posts() ) : $query->the_post();
+            	$bg = get_post_meta($post->ID, 'collaborateurportraitbg', true);
+            	$coWorkerPortrait = wp_get_attachment_image_src(get_post_meta($post->ID, 'collaborateurportrait', true),'full');
+				?>
+            	<div class="co-workers-portrait">
+            		<div>
+            			<div style="background-image:url(<?php echo $coWorkerPortrait[0]; ?>);">
+							<!-- <img src="<?php echo $coWorkerPortrait[0]; ?>"> -->
+            			</div>
+            			<p class="<?php echo $bg; ?>"><a target="_blank" href="mailto:<?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?>"><span><?php echo get_post_meta($post->ID, 'collaborateurmail', true); ?></span></a></p>
+            		</div>
+
+            		<h5><?php the_title(); ?></h5>
+					<hr />
+					<h6><?php echo get_post_meta($post->ID, 'collaborateurrole', true); ?></h6>
+
+            	</div>
+			<?php
+	            	$itterCoworkers++;
+	            	if ($itterCoworkers % 3 == 0) { ?>
+	            		</div><div class="co-workers-portraits-slide">
 	            	<?php }
-	            endwhile;
-	            ?>
-		--></div><!--
-	--></div>
+        	endwhile;
+		?>
+		</div>
+	</div>
 </div>
 
 <?php 
 	if(isset($asideContent[4])){
 		if(strlen($asideContent[4]['text']) !== 0){ ?>
 
-			<div id="aside" style="background-image:url(<?php echo $asideContent[4]['image'][0]; ?>)">
+			<div class="aside" style="background-image:url(<?php echo $asideContent[4]['image'][0]; ?>)">
 				<p><?php echo $asideContent[4]['text'] ?></p>
 			</div>
 
@@ -272,7 +291,7 @@
 	<h4 class="main-title">Contact</h4>
 	<hr class="title-underline">
 
-	<p>Vous souhaitez faire intervenir un de nos coachs au sein de votre société</p>
+	<h6>Vous voulez en savoir plus sur nos méthodes d'accompagnement</h6>
 
 	<?php echo do_shortcode('[contact-form-7 id="34" title="Formulaire de Contact"]'); ?>
 

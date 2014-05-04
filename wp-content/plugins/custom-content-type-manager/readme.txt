@@ -3,9 +3,9 @@ Contributors: fireproofsocks
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FABHDKPU7P6LN
 Tags: cms, content management, custom post types, custom content types, custom fields, images, image fields, ecommerce, modx
 Requires at least: 3.3.0
-Tested up to: 3.6
-Stable tag: 0.9.7.11
-Version: 0.9.7.11
+Tested up to: 3.8.1
+Stable tag: 0.9.7.13
+Version: 0.9.7.13
 
 Break out of your blog!  Create custom fields for dropdowns, images, and more!  This plugin gives Wordpress true CMS functionality.
 
@@ -84,6 +84,14 @@ You can always checkout the most recent version of the code at
 or by going to your wp-content/plugins directory and executing the following command from the command-line:
 
 	svn checkout http://plugins.svn.wordpress.org/custom-content-type-manager/trunk custom-content-type-manager 
+
+= 0.9.7.13 =
+
+* Fix for dropdown/radio buttons
+
+= 0.9.7.12 =
+
+* Various fixes.
 
 = 0.9.7.11 =
 
@@ -445,6 +453,10 @@ And if you REALLY want some of these features implemented, you can hire me to co
 
 
 == Upgrade Notice ==
+
+= 0.9.7.13 =
+
+* All users should update: contains a fix for dropdown and radio fields.
 
 = 0.9.7.11 =
 

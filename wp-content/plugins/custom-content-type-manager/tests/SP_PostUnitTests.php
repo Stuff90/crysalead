@@ -14,7 +14,7 @@
  *
  * To run these tests, make sure you have THE test database loaded, then navigate 
  * to this file in your browser, e.g. 
- * http://cctm:8888/wp-content/plugins/custom-content-type-manager/tests/SP_PostUnitTests.php
+ * http://cctm/wp-content/plugins/custom-content-type-manager/tests/SP_PostUnitTests.php
  *
  * Or execute them via php on the command line:
  *	php /full/path/to/SP_PostUnitTests.php

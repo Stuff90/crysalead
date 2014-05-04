@@ -173,6 +173,7 @@ class CCTM_dropdown extends CCTM_FormElement
 						$values[$r_i] = $r[0];
 					}
 				}
+				$this->use_key_values = 1; // see https://code.google.com/p/wordpress-custom-content-type-manager/issues/detail?id=541
 				$this->set_prop('options', $options);
 				$this->set_prop('values', $values);
 			}
@@ -199,7 +200,6 @@ class CCTM_dropdown extends CCTM_FormElement
 		
 		$opt_cnt = count($this->options);
 
-
 		// Populate the options
 		for ( $i = 0; $i < $opt_cnt; $i++ ) {
 			$hash = $this->get_props();
@@ -220,6 +220,7 @@ class CCTM_dropdown extends CCTM_FormElement
 
 			$hash['is_selected'] = '';
 			$hash['is_checked'] = '';
+
 			if ( trim($current_value) == trim($hash['value']) ) {
 				$hash['is_checked'] = 'checked="checked"';
 				$hash['is_selected'] = 'selected="selected"';
@@ -459,8 +460,6 @@ class CCTM_dropdown extends CCTM_FormElement
 		}
 		return $posted_data; // filtered data
 	}
-
-
 }
 
 

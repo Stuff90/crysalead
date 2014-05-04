@@ -13,7 +13,7 @@
  * RUNNING TESTS
  *
  * To run these tests, simply navigate to this file in your browser, e.g. 
- * http://cctm:8888/wp-content/plugins/custom-content-type-manager/tests/GetPostsFormUnitTests.php
+ * http://cctm/wp-content/plugins/custom-content-type-manager/tests/GetPostsFormUnitTests.php
  *
  * Or execute them via php on the command line:
  *	php /full/path/to/GetPostsFormUnitTests.php

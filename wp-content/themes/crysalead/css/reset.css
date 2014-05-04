@@ -11,7 +11,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   box-sizing: border-box;
 }
 html { height: 100%;overflow-x:hidden; }
-body { font-size: 62.5%; line-height: 1; font-family: Arial, Tahoma, sans-serif;height:100%;}
+body { font-size: 62.5%; line-height: 1.4em; font-family: Arial, Tahoma, sans-serif;height:100%;}
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
 ol, ul { list-style: none; }
@@ -23,4 +23,4 @@ strong { font-weight: bold; }
 table { border-collapse: collapse; border-spacing: 0; }
 img { border: 0; max-width: 100%; }
 
-p { font-size: 1em; line-height: 1.0em; color: #333; }
+p { font-size: 1.5em; line-height: 1.5em; color: #333; }

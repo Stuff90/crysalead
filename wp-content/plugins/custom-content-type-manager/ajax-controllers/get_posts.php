@@ -15,12 +15,12 @@ if (isset($GLOBALS['wp_post_types'][$post_type]->cap->edit_posts)) {
 	$cap = $GLOBALS['wp_post_types'][$post_type]->cap->edit_posts; 
 }
 if (!current_user_can($cap)) die('<pre>You do not have permission to do that.</pre>');
-require_once(CCTM_PATH.'/includes/CCTM_FormElement.php');
-require_once(CCTM_PATH.'/includes/SummarizePosts.php');
-require_once(CCTM_PATH.'/includes/GetPostsQuery.php');
-require_once(CCTM_PATH.'/includes/GetPostsForm.php');
+require_once CCTM_PATH.'/includes/CCTM_FormElement.php';
+require_once CCTM_PATH.'/includes/SummarizePosts.php';
+require_once CCTM_PATH.'/includes/GetPostsQuery.php';
+require_once CCTM_PATH.'/includes/GetPostsForm.php';
 
-
+//print '<pre>'.print_r($_POST,true).'</pre>'; exit;
 // Template Variables Initialization
 $d = array(); 
 $d['search_parameters'] = '';
@@ -32,14 +32,12 @@ $d['content']			= '';
 $d['page_number']		= '0'; 
 $d['orderby'] 			= 'ID';
 $d['order'] 			= 'ASC';
+$d['exclude'] = CCTM::get_value($_POST, 'exclude');
 
 
 // Generate a search form
 // we do this AFTER the get_posts() function so the form can access the GetPostsQuery->args/defaults
 $Form = new GetPostsForm();
-
-
-//$d['content'] = '<pre>'.print_r($_POST, true) . '</pre>';
 
 //! Validation
 // Some Tests first to see if the request is valid...
@@ -71,7 +69,7 @@ $possible_configs = array();
 $possible_configs[] = '/config/post_selector/'.$fieldname.'.php'; 	// e.g. my_field.php
 $possible_configs[] = '/config/post_selector/_'.$def['type'].'.php'; 		// e.g. _image.php
 $possible_configs[] = '/config/post_selector/_relation.php'; 		// default
-
+//print '<pre>'.print_r($possible_configs,true).'</pre>'; exit;
 CCTM::$post_selector = array();
 CCTM::$search_by = true; // all options available if the tpl passes them
 if (!CCTM::load_file($possible_configs)) {
@@ -81,14 +79,17 @@ if (!CCTM::load_file($possible_configs)) {
 
 // This gets subsequent search data that gets passed when the user refines the search.
 $args = array();
-// defaults
-$args['orderby'] = 'ID';
-$args['order'] = 'ASC';
+// Do not set defaults here! It causes any values set in the config/post_selector/ files
+// to be ignored. See https://code.google.com/p/wordpress-custom-content-type-manager/issues/detail?id=537
+//$args['orderby'] = 'ID';
+//$args['order'] = 'ASC';
 
 if (isset($_POST['search_parameters'])) {
-
+    // e.g. fieldname=movie_clip&fieldtype=media&page_number=0&orderby=ID&order=ASC
 	parse_str($_POST['search_parameters'], $args);
 
+    //print '<pre>'.print_r($args,true).'</pre>'; exit;
+    
 	// Pass the "view" parameters to the view
 	$d['page_number'] = CCTM::get_value($args, 'page_number', 0);
 	$d['orderby'] = CCTM::get_value($args, 'orderby', 'ID');
@@ -120,7 +121,7 @@ foreach($additional_defaults as $k => $v) {
 		CCTM::$post_selector[$k] = $v;
 	}
 }
-
+//print '<pre>'.print_r(CCTM::$post_selector,true).'</pre>'; exit;
 
 //------------------------------------------------------------------------------
 // Begin!
@@ -139,6 +140,7 @@ $args['offset'] = 0; // assume 0, unless we got a page number
 if (is_numeric($d['page_number']) && $d['page_number'] > 1) {
 	$args['offset'] = ($d['page_number'] - 1) * CCTM::$post_selector['limit'];
 }
+//print '<pre>'.print_r($args,true).'</pre>'; exit;
 
 // Set pagination tpls
 $tpls = array (
@@ -155,9 +157,9 @@ $tpls = array (
 $Q->set_tpls($tpls);
 
 // Get the results
-//$d['content'] = '<pre>'.print_r($args, true) . '</pre>';
+//print '<pre>'.print_r(CCTM::$search_by, true) . '</pre>';
 $results = $Q->get_posts($args);
-
+//print '<pre>'.$Q->debug().'</pre>';
 $search_form_tpl = CCTM::load_tpl(
 	array('post_selector/search_forms/'.$fieldname.'.tpl'
 		, 'post_selector/search_forms/_'.$def['type'].'.tpl'
@@ -168,6 +170,7 @@ $search_form_tpl = CCTM::load_tpl(
 $Form->set_tpl($search_form_tpl);
 $Form->set_name_prefix(''); // blank out the prefixes
 $Form->set_id_prefix('');
+
 $d['search_form'] = $Form->generate(CCTM::$search_by, $args);
 
 $item_tpl = '';
@@ -238,7 +241,6 @@ foreach ($results as $r){
 	$hash['content'] .= CCTM::parse($item_tpl, $r);
 }
 
-// die(print_r($hash,true));
 $d['content'] .= CCTM::parse($wrapper_tpl,$hash);
 
 $d['content'] .= '<div class="cctm_pagination_links">'.$Q->get_pagination_links().'</div>';

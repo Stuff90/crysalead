@@ -9,13 +9,13 @@ The 'html' bit has something like this when you click "Insert into Post"
 (but NOT if you click "Save all Changes"):
 
 In WP 3.2:
-<a href="http://cctm:8888/sub/?attachment_id=603" rel="attachment wp-att-603"><img src="http://cctm:8888/sub/wp-content/uploads/2011/11/Photo-on-2011-07-14-at-23.01-300x225.jpg" alt="" title="Photo on 2011-07-14 at 23.01" width="300" height="225" class="alignnone size-medium wp-image-603" /></a>
+<a href="http://cctm/sub/?attachment_id=603" rel="attachment wp-att-603"><img src="http://cctm/sub/wp-content/uploads/2011/11/Photo-on-2011-07-14-at-23.01-300x225.jpg" alt="" title="Photo on 2011-07-14 at 23.01" width="300" height="225" class="alignnone size-medium wp-image-603" /></a>
 
 In WP 3.3, they changed it... the Media Browser now returns something like this:
-<a href="http://cctm:8888/sub/wp-content/uploads/2011/11/IMG_0378.jpg"><img src="http://cctm:8888/sub/wp-content/uploads/2011/11/IMG_0378.jpg" alt="" title="LA Sunset" class="alignnone size-full wp-image-773" /></a>
+<a href="http://cctm/sub/wp-content/uploads/2011/11/IMG_0378.jpg"><img src="http://cctm/sub/wp-content/uploads/2011/11/IMG_0378.jpg" alt="" title="LA Sunset" class="alignnone size-full wp-image-773" /></a>
 
 Or simply:
-<a href='http://cctm:8888/sub/wp-content/uploads/2011/11/Blank-W9.pdf'>Blank-W9</a>
+<a href='http://cctm/sub/wp-content/uploads/2011/11/Blank-W9.pdf'>Blank-W9</a>
 
 When finished, the function redefines the send_to_editor() function back to what
 it was before (i.e. I copied the definition from wp-admin/js/media-upload.dev.js
@@ -50,7 +50,6 @@ function cctm_upload(fieldname, fieldtype, upload_type) {
 
 	cctm_fieldname = fieldname; // pass this to global scope
 	append_or_replace = upload_type; // pass this to global scope
-
 	// Override the send_to_editor() function from wp-admin/js/media-upload.js
 	window.send_to_editor = function(html) {
 	
@@ -107,52 +106,53 @@ function cctm_upload(fieldname, fieldtype, upload_type) {
 		
 		// Restore the function back to normal (copied from ./wp-admin/js/media-upload.dev.js)
 		window.send_to_editor = function(h) {
-			        var ed, mce = typeof(tinymce) != 'undefined', qt = typeof(QTags) != 'undefined';
-			
-			        if ( !wpActiveEditor ) {
-			                if ( mce && tinymce.activeEditor ) {
-			                        ed = tinymce.activeEditor;
-			                        wpActiveEditor = ed.id;
-			                } else if ( !qt ) {
-			                        return false;
-			                }
-			        } else if ( mce ) {
-			                if ( tinymce.activeEditor && (tinymce.activeEditor.id == 'mce_fullscreen' || tinymce.activeEditor.id == 'wp_mce_fullscreen') )
-			                        ed = tinymce.activeEditor;
-			                else
-			                        ed = tinymce.get(wpActiveEditor);
-			        }
-			
-			        if ( ed && !ed.isHidden() ) {
-			                // restore caret position on IE
-			                if ( tinymce.isIE && ed.windowManager.insertimagebookmark )
-			                        ed.selection.moveToBookmark(ed.windowManager.insertimagebookmark);
-			
-			                if ( h.indexOf('[caption') === 0 ) {
-			                        if ( ed.plugins.wpeditimage )
-			                                h = ed.plugins.wpeditimage._do_shcode(h);
-			                } else if ( h.indexOf('[gallery') === 0 ) {
-			                        if ( ed.plugins.wpgallery )
-			                                h = ed.plugins.wpgallery._do_gallery(h);
-			                } else if ( h.indexOf('[embed') === 0 ) {
-			                        if ( ed.plugins.wordpress )
-			                                h = ed.plugins.wordpress._setEmbed(h);
-			                }
-			
-			                ed.execCommand('mceInsertContent', false, h);
-			        } else if ( qt ) {
-			                QTags.insertContent(h);
-			        } else {
-			                document.getElementById(wpActiveEditor).value += h;
-			        }
-			
-			        try{tb_remove();}catch(e){};
-			}
+        	var ed, mce = typeof(tinymce) != 'undefined', qt = typeof(QTags) != 'undefined';
+        
+        	if ( !wpActiveEditor ) {
+        		if ( mce && tinymce.activeEditor ) {
+        			ed = tinymce.activeEditor;
+        			wpActiveEditor = ed.id;
+        		} else if ( !qt ) {
+        			return false;
+        		}
+        	} else if ( mce ) {
+        		if ( tinymce.activeEditor && (tinymce.activeEditor.id == 'mce_fullscreen' || tinymce.activeEditor.id == 'wp_mce_fullscreen') )
+        			ed = tinymce.activeEditor;
+        		else
+        			ed = tinymce.get(wpActiveEditor);
+        	}
+        
+        	if ( ed && !ed.isHidden() ) {
+        		// restore caret position on IE
+        		if ( tinymce.isIE && ed.windowManager.insertimagebookmark )
+        			ed.selection.moveToBookmark(ed.windowManager.insertimagebookmark);
+        
+        		if ( h.indexOf('[caption') !== -1 ) {
+        			if ( ed.wpSetImgCaption )
+        				h = ed.wpSetImgCaption(h);
+        		} else if ( h.indexOf('[gallery') !== -1 ) {
+        			if ( ed.plugins.wpgallery )
+        				h = ed.plugins.wpgallery._do_gallery(h);
+        		} else if ( h.indexOf('[embed') === 0 ) {
+        			if ( ed.plugins.wordpress )
+        				h = ed.plugins.wordpress._setEmbed(h);
+        		}
+        
+        		ed.execCommand('mceInsertContent', false, h);
+        	} else if ( qt ) {
+        		QTags.insertContent(h);
+        	} else {
+        		document.getElementById(wpActiveEditor).value += h;
+        	}
+        
+        	try{tb_remove();}catch(e){}
+        };
 		// end of function restoration
 	}
 
-	
+    
 	tb_show('', 'media-upload.php?post_id=0&amp;type=file&amp;TB_iframe=true');
+//	tb_show('', cctm.cctm_url +'/media-upload.php?post_id=0&amp;type=file&amp;TB_iframe=true');	
 	return false;
 }
 

@@ -40,7 +40,7 @@ class CCTMUnitTests extends UnitTestCase {
 
 /*
     function testCategories() {
-    	$page = file_get_contents('http://cctm:8888/category/uncategorized/');
+    	$page = file_get_contents('http://cctm/category/uncategorized/');
     	
     	print $page;
     }
@@ -51,7 +51,7 @@ class CCTMUnitTests extends UnitTestCase {
 	
 /*
     function testTags() {
-    	$page = file_get_contents('http://cctm:8888/category/uncategorized/');
+    	$page = file_get_contents('http://cctm/category/uncategorized/');
     	
     	print $page;
     }
@@ -77,7 +77,7 @@ class CCTMUnitTests extends UnitTestCase {
 	 */
 
 	function testRSS() {
-		$xml = file_get_contents('http://cctm:8888/feed/');
+		$xml = file_get_contents('http://cctm/feed/');
 		
 		$this->assertTrue($xml);
 	}
@@ -256,7 +256,7 @@ class CCTMUnitTests extends UnitTestCase {
 	// gallery
 	function testFilter15() {
 		$actual = CCTM::filter(array(118,119,120),'gallery');
-		$this->assertTrue($actual == '<div class="cctm_gallery" id="cctm_gallery_1"><img height="2592" width="1936" src="http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg" title="2012 VACATION 057" alt="" class="cctm_image" id="cctm_image_1"/></div><div class="cctm_gallery" id="cctm_gallery_2"><img height="2592" width="1936" src="http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-058.jpg" title="2012 VACATION 058" alt="" class="cctm_image" id="cctm_image_2"/></div><div class="cctm_gallery" id="cctm_gallery_3"><img height="2592" width="1936" src="http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-059.jpg" title="2012 VACATION 059" alt="" class="cctm_image" id="cctm_image_3"/></div>');
+		$this->assertTrue($actual == '<div class="cctm_gallery" id="cctm_gallery_1"><img height="2592" width="1936" src="http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg" title="2012 VACATION 057" alt="" class="cctm_image" id="cctm_image_1"/></div><div class="cctm_gallery" id="cctm_gallery_2"><img height="2592" width="1936" src="http://cctm/wp-content/uploads/2012/06/2012-VACATION-058.jpg" title="2012 VACATION 058" alt="" class="cctm_image" id="cctm_image_2"/></div><div class="cctm_gallery" id="cctm_gallery_3"><img height="2592" width="1936" src="http://cctm/wp-content/uploads/2012/06/2012-VACATION-059.jpg" title="2012 VACATION 059" alt="" class="cctm_image" id="cctm_image_3"/></div>');
 	}
 	
 	// get_post
@@ -279,7 +279,7 @@ class CCTMUnitTests extends UnitTestCase {
 		// default filter for this field is to_image_src
 		CCTM::$post_id = 77;
 		$img = get_custom_field('poster_image');
-		$this->assertTrue($img =='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-059.jpg');
+		$this->assertTrue($img =='http://cctm/wp-content/uploads/2012/06/2012-VACATION-059.jpg');
 		$img = get_custom_field('poster_image:raw');
 		$this->assertTrue($img =='120');
 	}
@@ -300,27 +300,27 @@ class CCTMUnitTests extends UnitTestCase {
 	function testFilter42() {
 		$array = CCTM::filter('["118","119","120"]','to_array', 'to_image_src');
 		
-		$this->assertTrue($array[0]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
-		$this->assertTrue($array[1]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-058.jpg');
-		$this->assertTrue($array[2]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-059.jpg');
+		$this->assertTrue($array[0]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
+		$this->assertTrue($array[1]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-058.jpg');
+		$this->assertTrue($array[2]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-059.jpg');
 	}
 
 	// to_image_array
 	function testFilter50() {
 		$array = CCTM::filter('118','to_image_array');
-		$this->assertTrue($array[0]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
+		$this->assertTrue($array[0]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
 		$this->assertTrue($array[1]=='1936');
 		$this->assertTrue($array[2]=='2592');
 	}
 	function testFilter51() {
 		$array = CCTM::filter(array('118','119'),'to_image_array');
 
-		$this->assertTrue($array[0][0]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
+		$this->assertTrue($array[0][0]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
 		$this->assertTrue($array[0][1]=='1936');
 		$this->assertTrue($array[0][2]=='2592');
 
 
-		$this->assertTrue($array[1][0]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-058.jpg');
+		$this->assertTrue($array[1][0]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-058.jpg');
 		$this->assertTrue($array[1][1]=='1936');
 		$this->assertTrue($array[1][2]=='2592');
 	}
@@ -328,50 +328,50 @@ class CCTMUnitTests extends UnitTestCase {
 	// to_image_src
 	function testFilter60() {
 		$src = CCTM::filter('118','to_image_src');
-		$this->assertTrue($src=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
+		$this->assertTrue($src=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
 	}
 	function testFilter61() {
 		$array = CCTM::filter(array('118','119'),'to_image_src');
-		$this->assertTrue($array[0]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
-		$this->assertTrue($array[1]=='http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-058.jpg');
+		$this->assertTrue($array[0]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg');
+		$this->assertTrue($array[1]=='http://cctm/wp-content/uploads/2012/06/2012-VACATION-058.jpg');
 	}
 
 	// to_image_tag
 	function testFilter70() {
 		$tag = CCTM::filter('118','to_image_tag');
-//		$this->assertTrue($tag=='<img width="1936" height="2592" src="http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg" class="attachment-full" alt="2012 VACATION 057" title="2012 VACATION 057" />');
-		$this->assertTrue(preg_match('#src="http://cctm:8888/wp-content/uploads/2012/06/2012\-VACATION\-057\.jpg"#', $tag));
+//		$this->assertTrue($tag=='<img width="1936" height="2592" src="http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg" class="attachment-full" alt="2012 VACATION 057" title="2012 VACATION 057" />');
+		$this->assertTrue(preg_match('#src="http://cctm/wp-content/uploads/2012/06/2012\-VACATION\-057\.jpg"#', $tag));
 	}
 	function testFilter71() {
 		// this filter always ouputs a string
 		$tags = CCTM::filter(array('118','119'),'to_image_tag');
-		//$this->assertTrue($tags=='<img width="1936" height="2592" src="http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-057.jpg" class="attachment-full" alt="2012 VACATION 057" title="2012 VACATION 057" /><img width="1936" height="2592" src="http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-058.jpg" class="attachment-full" alt="2012 VACATION 058" title="2012 VACATION 058" />');
+		//$this->assertTrue($tags=='<img width="1936" height="2592" src="http://cctm/wp-content/uploads/2012/06/2012-VACATION-057.jpg" class="attachment-full" alt="2012 VACATION 057" title="2012 VACATION 057" /><img width="1936" height="2592" src="http://cctm/wp-content/uploads/2012/06/2012-VACATION-058.jpg" class="attachment-full" alt="2012 VACATION 058" title="2012 VACATION 058" />');
 		$this->assertTrue(is_scalar($tags));
 	}
 	
 	// to_link_href
 	function testFilter80() {
 		$href = CCTM::filter('80','to_link_href');
-		$this->assertTrue($href=='http://cctm:8888/harry-potter/');
+		$this->assertTrue($href=='http://cctm/harry-potter/');
 	}
 	function testFilter81() {
 		$hrefs = CCTM::filter(array('80','11'),'to_link_href');
-		$this->assertTrue($hrefs[0]=='http://cctm:8888/harry-potter/');
-		$this->assertTrue($hrefs[1]=='http://cctm:8888/post5/');
+		$this->assertTrue($hrefs[0]=='http://cctm/harry-potter/');
+		$this->assertTrue($hrefs[1]=='http://cctm/post5/');
 	}
 
 	// to_link
 	function testFilter90() {
 		$link = CCTM::filter('80','to_link');
-		$this->assertTrue($link=='<a href="http://cctm:8888/harry-potter/" title="Harry Potter">Harry Potter</a>');
+		$this->assertTrue($link=='<a href="http://cctm/harry-potter/" title="Harry Potter">Harry Potter</a>');
 	}
 	function testFilter91() {
 		$links = CCTM::filter(array('80','11'),'to_link');
-		$this->assertTrue($links=='<a href="http://cctm:8888/harry-potter/" title="Harry Potter">Harry Potter</a>, <a href="http://cctm:8888/post5/" title="Post5">Post5</a>');
+		$this->assertTrue($links=='<a href="http://cctm/harry-potter/" title="Harry Potter">Harry Potter</a>, <a href="http://cctm/post5/" title="Post5">Post5</a>');
 	}
 	function testFilter92() {
 		$link = CCTM::filter('80','to_link','Click Me');
-		$this->assertTrue($link=='<a href="http://cctm:8888/harry-potter/" title="Harry Potter">Click Me</a>');
+		$this->assertTrue($link=='<a href="http://cctm/harry-potter/" title="Harry Potter">Click Me</a>');
 	}
 
 
@@ -565,7 +565,7 @@ class CCTMUnitTests extends UnitTestCase {
 		$this->assertTrue(get_custom_field('rating') == 'R');
 		$this->assertTrue(get_custom_field('rating:raw') == 'R');
 		CCTM::$post_id = 77;
-		$this->assertTrue(get_custom_field('gallery:gallery') == '<div class="cctm_gallery" id="cctm_gallery_1"><img height="2592" width="1936" src="http://cctm:8888/wp-content/uploads/2012/06/2012-VACATION-059.jpg" title="2012 VACATION 059" alt="" class="cctm_image" id="cctm_image_1"/></div><div class="cctm_gallery" id="cctm_gallery_2"><img height="313" width="637" src="http://cctm:8888/wp-content/uploads/2012/08/I-just-had-sex.jpg" title="I just had sex" alt="" class="cctm_image" id="cctm_image_2"/></div>');
+		$this->assertTrue(get_custom_field('gallery:gallery') == '<div class="cctm_gallery" id="cctm_gallery_1"><img height="2592" width="1936" src="http://cctm/wp-content/uploads/2012/06/2012-VACATION-059.jpg" title="2012 VACATION 059" alt="" class="cctm_image" id="cctm_image_1"/></div><div class="cctm_gallery" id="cctm_gallery_2"><img height="313" width="637" src="http://cctm/wp-content/uploads/2012/08/I-just-had-sex.jpg" title="I just had sex" alt="" class="cctm_image" id="cctm_image_2"/></div>');
 		
 	}
 	

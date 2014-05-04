@@ -40,7 +40,7 @@ class CCTMUnitTestsMgr extends UnitTestCase {
 		
 		$username = 'cctm';
 		$password = 'cctm';
-		$login_url = 'http://cctm:8888/wp-login.php';
+		$login_url = 'http://cctm/wp-login.php';
 		
 		
 		$this->ckfile = tempnam ('/tmp', 'CURLCOOKIE');
@@ -86,7 +86,7 @@ class CCTMUnitTestsMgr extends UnitTestCase {
 
 	// Make sure the CCTM menu is loaded up (i.e. is the plugin active?)
 	function testMenu() {
-		$ch = curl_init ('http://cctm:8888/wp-admin/index.php');
+		$ch = curl_init ('http://cctm/wp-admin/index.php');
 		curl_setopt ($ch, CURLOPT_COOKIEFILE, $this->ckfile); 
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
 		$haystack = curl_exec ($ch);
@@ -117,7 +117,7 @@ class CCTMUnitTestsMgr extends UnitTestCase {
 	
 	// Hierarchical Enabled: does the page have the appropriate selection?
 	function testHierarchy() {
-		$ch = curl_init ('http://cctm:8888/wp-admin/post-new.php?post_type=people');
+		$ch = curl_init ('http://cctm/wp-admin/post-new.php?post_type=people');
 		curl_setopt ($ch, CURLOPT_COOKIEFILE, $this->ckfile); 
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
 		
@@ -132,7 +132,7 @@ class CCTMUnitTestsMgr extends UnitTestCase {
 	
 	// Custom Hierarchy : make sure we can select a parent that's from a foreign post-type
 	function testCustomHierarchy() {
-		$ch = curl_init ('http://cctm:8888/wp-admin/post-new.php?post_type=room');
+		$ch = curl_init ('http://cctm/wp-admin/post-new.php?post_type=room');
 		curl_setopt ($ch, CURLOPT_COOKIEFILE, $this->ckfile); 
 		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
 		

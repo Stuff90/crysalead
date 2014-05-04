@@ -10,10 +10,10 @@
         <title>Crysalead</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-
+        <link href='http://fonts.googleapis.com/css?family=Volkhov:400italic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/css/reset.css" type="text/css">
         <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css">
-
+        <link rel="shortcut icon" href="<?php bloginfo('template_url'); ?>/assets/favicon.jpg" />
         <!--
             /* @license
              * MyFonts Webfont Build ID 2527495, 2013-04-11T05:59:18-0400
@@ -49,7 +49,9 @@
         <div id="loader">
             <p>Chargement...</p>
         </div>
-        <header class="page">
+        <header class="page fixed-height">
+
+            <div id="cover"></div>
 
             <div id="site-title-wrapper">
                 <div>
@@ -67,8 +69,6 @@
                 </div>
             </div>
 
-            <div id="cover"></div>
-            
             <div id="petals-canvas">
                 <div class="flying-elt"></div>
                 <div class="flying-elt"></div>
@@ -82,11 +82,15 @@
 
             <nav id="menu">
                 <ul>
-                    <li><a href="#office"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Le cabinet<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
-                    <li><a href="#accompaniment"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Notre accompagnement<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
-                    <li><a href="#whoareus"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Qui sommes-nous ?<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
-                    <li><a href="#co-workers"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Les collaborateurs<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
-                    <li><a href="#contact"><img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-left.png">Contact<img src="<?php bloginfo('template_url'); ?>/assets/img/menu-activeState-right.png"></a></li>
+                    <li><a class="anchor" href="#office">Le cabinet</a></li>
+                    <li><a class="anchor" href="#accompaniment">Notre accompagnement</a></li>
+                    <li><a class="anchor" href="#whoareus">Qui sommes-nous ?</a></li>
+                    <li><a class="anchor" href="#co-workers">Nos partenaires</a></li>
+                    <li><a class="anchor" href="#contact">Contact</a></li>
+                    <?php 
+                    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+                    ?>
+                    <li><a href="<?php echo $uri_parts[0] ?>">FR</a> | <a href="<?php echo $uri_parts[0] ?>?lang=en">EN</a></li>
                 </ul>
             </nav>
         </header>

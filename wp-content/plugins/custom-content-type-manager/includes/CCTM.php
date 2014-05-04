@@ -1,6 +1,6 @@
 <?php
 /**
- * CCTM = Custom Content Type Manager
+ * CCTM  Custom Content Type Manager
  * 
  * This is the main class for the Custom Content Type Manager plugin.
  * It holds its functions hooked to WP events and utilty functions and configuration
@@ -19,7 +19,7 @@ class CCTM {
 	// See http://php.net/manual/en/function.version-compare.php:
 	// any string not found in this list < dev < alpha =a < beta = b < RC = rc < # < pl = p
 	const name   = 'Custom Content Type Manager';
-	const version = '0.9.7.11';
+	const version = '0.9.7.13';
 	const version_meta = 'pl'; // dev, rc (release candidate), pl (public release)
 
 	// Required versions (referenced in the CCTMtest class).
@@ -106,7 +106,8 @@ class CCTM {
 	// CSS and $_POST variables
 	public static $def_i = 0;
 
-
+    public static $hide_url_tab = false;
+    
 	// Optionally used for shortcodes
 	public static $post_id = null;
 	
@@ -179,7 +180,6 @@ class CCTM {
 		, 'save_empty_fields' => 1
 		, 'summarizeposts_tinymce' => 1
 		, 'custom_fields_tinymce' => 1
-		, 'flush_permalink_rules' => 1
 		, 'pages_in_rss_feed'	=> 0
 		, 'enable_right_now'	=> 1
 		, 'hide_posts'	=> 0
@@ -210,7 +210,7 @@ class CCTM {
 	// Names that are off-limits for custom post types b/c they're already used by WP
 	// Re "preview" see http://code.google.com/p/wordpress-custom-content-type-manager/issues/detail?id=321
 	public static $reserved_post_types = array('post', 'page', 'attachment', 'revision'
-		, 'nav_menu', 'nav_menu_item', 'preview');
+		, 'nav_menu', 'nav_menu_item', 'preview','portfolio');
 	
 	// Any post-types that WP registers, but which the CCTM should ignore (can't have custom fields)
 	public static $ignored_post_types = array('attachment', 'revision', 'nav_menu', 'nav_menu_item');
@@ -549,14 +549,21 @@ class CCTM {
 			'_tpl' => '_default',
 			'_id_prefix' => 'cctm_',
 			'_name_prefix' => 'cctm_',
-			'_css' => CCTM_URL . '/css/manager.css,'.CCTM_URL.'/css/validation.css'
+			'_css' => CCTM_URL . '/css/manager.css,'.CCTM_URL.'/css/validation.css',
+			'_fields' =>'',
+			'_debug' => 0,
 		);
 
 		$args = array_merge($defaults, $raw_args );
 
 		// Call the _callback_pre function (if present).
 		if ($args['_callback_pre']) {
-			$output['content'] .= call_user_func($args['_callback_pre'], $args);
+            if (function_exists($args['_callback_pre'])) {
+                $output['content'] .= call_user_func($args['_callback_pre'], $args);
+			}
+			else {
+                return '_callback_pre function does not exist: '.$args['_callback_pre'];
+			}
 		}
 	
 		// Load CSS
@@ -566,7 +573,7 @@ class CCTM {
 			wp_register_style($css_id, $c);
 			wp_enqueue_style($css_id);
 		}
-		
+
 		// Hard error
 		if (empty($post_type)) {
 			return __('cctm_post_form shortcode requires the "post_type" parameter.', CCTM_TXTDOMAIN);
@@ -587,6 +594,7 @@ class CCTM {
         //------------------------------		
 		$nonce = CCTM::get_value($_POST, '_cctm_nonce');
 		if ( !empty($_POST)) {
+
 			// Bogus submission
 			if (!wp_verify_nonce($nonce, 'cctm_post_form_nonce')) {
 				die('Your form could not be submitted.  Please reload the page and try again.');
@@ -600,11 +608,18 @@ class CCTM {
 					$vals[$k] = wp_kses($v, array()); // TODO: options for this?
 				}
 			}
+
 			// Validate fields
 			StandardizedCustomFields::validate_fields($post_type,$vals);
 			
-			// Add the arguments back in
 			$vals = array_merge($vals,$args);
+			
+    		if ($args['_debug']) {
+                print '<div style="background-color:orange; padding:10px;"><h3>[cctm_post_form] DEBUG MODE</h3>'
+                    .'<h4>Posted Data</h4><pre>'.print_r($vals,true).'</pre>'
+                    .'</div>';
+                return;
+    		}			
 			
 			// Save data if it was properly submitted	
 			if (empty(CCTM::$post_validation_errors)) {
@@ -630,8 +645,28 @@ class CCTM {
         //------------------------------
 		$output['_action'] = $args['_action'];
 
+		// Custom fields	
+		$explicit_fields = false;	
+		$custom_fields = array();		
+		if ($args['_fields']) {
+            $explicit_fields = true;
+            $tmp = explode(',', $args['_fields']);
+            foreach ($tmp as $t) {
+                $custom_fields[] = trim($t);
+            }
+            $args['_fields'] = $custom_fields;
+		}
+		elseif (isset(CCTM::$data['post_type_defs'][$post_type]['custom_fields'])) {
+		  $custom_fields = CCTM::$data['post_type_defs'][$post_type]['custom_fields'];
+		}
+
+
 		// Post Title
-		if (post_type_supports($args['post_type'],'title') && !isset($args['post_title'])) {
+		if ( 
+		  !$explicit_fields && post_type_supports($args['post_type'],'title') && !isset($args['post_title']) 
+		  || ($explicit_fields && in_array('post_title', $custom_fields)) 
+        ) {
+            
         	$FieldObj = CCTM::load_object('text','fields');
 			$post_title_def = array(
 				'label' => $args['_label_title'],
@@ -646,13 +681,16 @@ class CCTM {
 				'type' => 'text'
 			);
 			$FieldObj->set_props($post_title_def);
-			    $output_this_field = $FieldObj->get_create_field_instance();
+            $output_this_field = $FieldObj->get_create_field_instance();
 			$output['post_title'] = $output_this_field;
 			$output['content'] .= $output_this_field;
 		}
 		
 		// Post Content (editor)
-		if (post_type_supports($args['post_type'],'editor') && !isset($args['post_content'])) {
+		if (
+            !$explicit_fields && post_type_supports($args['post_type'],'editor') && !isset($args['post_content'])
+            || ($explicit_fields && in_array('post_content', $custom_fields)) 
+        ) {
         	$FieldObj = CCTM::load_object('textarea','fields'); // TODO: change to wysiwyg
 			$post_title_def = array(
 				'label' => $args['_label_content'],
@@ -672,7 +710,10 @@ class CCTM {
 			$output['content'] .= $output_this_field;
 		}
 		// Post Excerpt
-		if (post_type_supports($args['post_type'],'excerpt') && !isset($args['post_excerpt'])) {
+		if (
+            !$explicit_fields && post_type_supports($args['post_type'],'excerpt') && !isset($args['post_excerpt'])
+            || ($explicit_fields && in_array('post_excerpt', $custom_fields)) 
+        ) {
         	$FieldObj = CCTM::load_object('textarea','fields');
 			$post_title_def = array(
 				'label' => $args['_label_excerpt'],
@@ -692,18 +733,13 @@ class CCTM {
 			$output['content'] .= $output_this_field;
 		}
 		
-		// Custom fields		
-		$custom_fields = array();
-		
-		if (isset(CCTM::$data['post_type_defs'][$post_type]['custom_fields'])) {
-		  $custom_fields = CCTM::$data['post_type_defs'][$post_type]['custom_fields'];
-		}
 		foreach ( $custom_fields as $cf ) {
 			// skip the field if its value is hard-coded
 			if (!isset(CCTM::$data['custom_field_defs'][$cf]) || isset($args[$cf])) {
 				continue;
 			}
 			$def = CCTM::$data['custom_field_defs'][$cf];
+
 			if (isset($def['required']) && $def['required'] == 1) {
 				$def['label'] = $def['label'] . '*'; // Add asterisk
 			}
@@ -764,7 +800,12 @@ class CCTM {
 				, 'forms/_default.tpl'
 			)
 		);
-		
+		if ($args['_debug']) {
+		  $formtpl = '<div style="background-color:orange; padding:10px;"><h3>[cctm_post_form] DEBUG MODE</h3>'
+		      .'<h4>Arguments</h4><pre>'.print_r($args,true).'</pre>'
+		      .'</div>'
+		      .$formtpl;
+		}
 		return CCTM::parse($formtpl, $output);
 		
 	}
@@ -781,9 +822,7 @@ class CCTM {
 		// Strip out the control stuff (keys begin with underscore)
 		$vals = array();
 		foreach ($args as $k => $v) {
-			if (preg_match('/^_/',$k)) {
-				continue;
-			}
+			if ($k[0] == '_') continue;
 			$vals[$k] = $v;
 		}
 		
@@ -793,7 +832,7 @@ class CCTM {
 		if (!$email_only) {
 			require_once(CCTM_PATH.'/includes/SP_Post.php');
 			$P = new SP_Post();
-			$post_id = $P->insert($vals);
+			CCTM::$post_id = $P->insert($vals);
 		}
 		
 		// Email stuff
@@ -988,6 +1027,15 @@ class CCTM {
 		}
 	}
 
+    /**
+     * Used to customize the tabs shown in the Media Uploader thickbox
+     * shown for relation fields.  See the media-upload.php
+     *
+     */
+    public static function customize_upload_tabs($tabs) {
+        unset($tabs['type_url']);
+        return $tabs;
+    }
 	/**
 	 * Delete a directoroy and its contents.
 	 * @param	string $dirPath
@@ -1054,7 +1102,7 @@ class CCTM {
 	 * @return string
 	 */
 	public static function filter_sanitize_title($title, $raw_title, $context) {
-		
+
 		// This isn't always called on the public-side... it gets called in the manager too.
 		if ('query' == $context) {
 			global $wp_query;
@@ -1299,6 +1347,7 @@ class CCTM {
 	 */
 	public static function get_custom_field_defs() {
 		if ( isset(self::$data['custom_field_defs']) ) {
+//		      print '<pre>'.print_r(self::$data['custom_field_defs'],true).'</pre>';
 			// sort them
 			$defs = self::$data['custom_field_defs'];
 			usort($defs, CCTM::sort_custom_fields('name', 'strnatcasecmp'));
@@ -1491,7 +1540,7 @@ class CCTM {
 	 * @return	string	url of the thumbnail
 	 */
 	public static function get_thumbnail($id) {
-		
+
 		// Default output
 		$thumbnail_url = CCTM_URL .'/images/custom-fields/default.png';
 
@@ -1505,8 +1554,6 @@ class CCTM {
 		$post_mime_type = $post['post_mime_type'];
 		$thumbnail_url = $post['guid'];
 		
-		// return $thumbnail_url; // Bypass for now
-		
 		// Some translated labels and stuff
 		$r['preview'] = __('Preview', CCTM_TXTDOMAIN);
 		$r['remove'] = __('Remove', CCTM_TXTDOMAIN);
@@ -1519,28 +1566,28 @@ class CCTM {
 		if ($post_type == 'attachment' && preg_match('/^image/',$post_mime_type) && self::get_setting('cache_thumbnail_images')) {
 			$thumbnail_url = self::_get_create_thumbnail($post);
 		}
+		// Try to display the featured thumbnail if possible
+		elseif ($thumbnail_id = get_post_thumbnail_id($id)) {
+			list($src, $w, $h) = wp_get_attachment_image_src( $thumbnail_id, 'thumbnail', true, array('alt'=>__('Preview', CCTM_TXTDOMAIN)));
+			$thumbnail_url = $src;            
+        }
+		elseif (isset(CCTM::$data['post_type_defs'][$post_type]['use_default_menu_icon']) 
+				&& CCTM::$data['post_type_defs'][$post_type]['use_default_menu_icon'] == 0) {
+			$baseimg = basename(CCTM::$data['post_type_defs'][$post_type]['menu_icon']);
+			$thumbnail_url = CCTM_URL . '/images/icons/32x32/'. $baseimg;	
+		}
 		elseif ($post_type == 'post') {
 			$thumbnail_url = CCTM_URL . '/images/wp-post.png';
 		}
 		elseif ($post_type == 'page') {
 			$thumbnail_url = CCTM_URL . '/images/wp-page.png';	
 		}
-		// Other Attachments and other post-types: we go for the custom icon
-		else
-		{	
-			if (isset(CCTM::$data['post_type_defs'][$post_type]['use_default_menu_icon']) 
-					&& CCTM::$data['post_type_defs'][$post_type]['use_default_menu_icon'] == 0) {
-				$baseimg = basename(CCTM::$data['post_type_defs'][$post_type]['menu_icon']);
-				$thumbnail_url = CCTM_URL . '/images/icons/32x32/'. $baseimg;
-				
-			}
-			// Built-in WP types: we go for the default icon.
-			else {
-				list($src, $w, $h) = wp_get_attachment_image_src( $id, 'thumbnail', true, array('alt'=>__('Preview', CCTM_TXTDOMAIN)));
-				$thumbnail_url = $src;
-			}
+		// Other built-in WP types: we go for the default icon.
+		else {
+			list($src, $w, $h) = wp_get_attachment_image_src( $id, 'thumbnail', true, array('alt'=>__('Preview', CCTM_TXTDOMAIN)));
+			$thumbnail_url = $src;
 		}
-		//die(print_r($r,true));
+
 		return $thumbnail_url;	
 	}
 
@@ -2454,7 +2501,7 @@ class CCTM {
 	 * ) );
 	 */
 	public static function register_custom_post_types() {
-//return;
+
 		$post_type_defs = self::get_post_type_defs();
 
 		foreach ($post_type_defs as $post_type => $def) {
@@ -2468,12 +2515,7 @@ class CCTM {
 				register_post_type( $post_type, $def );
 			}
 		}
-		// Added per issue 50
-		// http://code.google.com/p/wordpress-custom-content-type-manager/issues/detail?id=50
-		if (self::get_setting('flush_permalink_rules')){
-			global $wp_rewrite;
-			$wp_rewrite->flush_rules();		
-		}
+		// flush_rules moved to CCTM_PostTypeDef
 	}
 
 

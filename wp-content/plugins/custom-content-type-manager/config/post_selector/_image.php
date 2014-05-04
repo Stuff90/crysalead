@@ -34,12 +34,14 @@ CCTM::$post_selector['post_type'] = 'attachment';
 CCTM::$post_selector['post_mime_type'] = 'image';
 CCTM::$post_selector['post_status'] = array('publish','inherit');
 CCTM::$post_selector['orderby'] = 'ID';
-CCTM::$post_selector['order'] = 'DESC';
+CCTM::$post_selector['order'] = 'ASC';
 CCTM::$post_selector['limit'] = 10;
 CCTM::$post_selector['paginate'] = 1;
 
 CCTM::$search_by = array();
 CCTM::$search_by[] = 'post_type';
+CCTM::$search_by[] = 'search_term';
+CCTM::$search_by[] = 'yearmonth';
 CCTM::$search_by[] = 'post_status';
 CCTM::$search_by[] = 'taxonomy';
 CCTM::$search_by[] = 'taxonomy_term';
